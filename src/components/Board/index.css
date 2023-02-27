@@ -1,0 +1,25 @@
+:root {
+    --dimension: 100px;
+}
+
+.row {
+    /* border: 1px solid blue; */
+    height: var(--dimension);
+    width: var(10*--dimension);
+    display: flex;
+}
+
+.tile {
+    /* border: 1px solid red; */
+    height: var(--dimension);
+    width: var(--dimension);
+    display: flex;
+}
+
+#white {
+    background-color: beige;
+}
+
+#black {
+    background-color: darkgray;
+}
