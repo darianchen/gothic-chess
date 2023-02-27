@@ -23,3 +23,7 @@
 #black {
     background-color: darkgray;
 }
+
+#white:hover, #black:hover {
+    background-color: red;
+}
