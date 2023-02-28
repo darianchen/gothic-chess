@@ -9,21 +9,25 @@
     display: flex;
 }
 
-.tile {
+.white, .black {
     /* border: 1px solid red; */
     height: var(--dimension);
     width: var(--dimension);
     display: flex;
 }
 
-#white {
+.white {
     background-color: beige;
 }
 
-#black {
+.black {
     background-color: darkgray;
 }
 
 #white:hover, #black:hover {
     background-color: red;
+}
+
+img {
+    pointer-events: none;
 }
