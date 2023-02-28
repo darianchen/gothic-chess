@@ -24,7 +24,7 @@
     background-color: darkgray;
 }
 
-#white:hover, #black:hover {
+.white:hover, .black:hover {
     background-color: red;
 }
 

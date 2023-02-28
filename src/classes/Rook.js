@@ -1,14 +1,14 @@
 import Piece from "./Piece";
-import whiterook from '../assets/Images/white_rook.png';
-import blackrook from '../assets/Images/black_rook.png';
+import whiteRook from '../assets/Images/white_rook.png';
+import blackRook from '../assets/Images/black_rook.png';
 
 class Rook extends Piece {
     constructor(color,board,position){
         super(color,board,position);
         if(color==='white'){
-            this.image = whiterook;
+            this.image = whiteRook;
         } else {
-            this.image = blackrook;
+            this.image = blackRook;
         }
     }
 
@@ -16,57 +16,21 @@ class Rook extends Piece {
         const [row, col] = this.position;
         const moves = [];
 
-        // Check moves to the top of the board
-        const checkUp = (row, col) => {
-            if (row < 0) return;
-            const piece = this.board[row][col];
-            if (!piece || piece.color !== this.color) {
-                moves.push([row, col]);
-            }
-            if (!piece) {
-                checkUp(row - 1, col);
-            }
-        };
-        checkUp(row - 1, col);
+        const dirs = [[0,1],[0,-1],[1,0],[-1,0]];
 
-        // Check moves to the bottom of the board
-        const checkDown = (row, col) => {
-            if (row >= this.board.length) return;
-            const piece = this.board[row][col];
-            if (!piece || piece.color !== this.color) {
-                moves.push([row, col]);
-            }
-            if (!piece) {
-                checkDown(row + 1, col);
+        const check = (r,c,dir) => {
+            const [newRow,newCol] = [r+dir[0],c+dir[1]];
+            if(this.outOfBounds(newRow,newCol)) return;
+            if(this.board[newRow][newCol]){
+                if(this.board[newRow][newCol].color !== this.color) moves.push([newRow,newCol]);
+                return;
+            } else {
+                moves.push([newRow,newCol]);
+                check(newRow,newCol,dir);
             }
         };
-        checkDown(row + 1, col);
 
-        // Check moves to the left of the board
-        const checkLeft = (row, col) => {
-            if (col < 0) return;
-            const piece = this.board[row][col];
-            if (!piece || piece.color !== this.color) {
-                moves.push([row, col]);
-            }
-            if (!piece) {
-                checkLeft(row, col - 1);
-            }
-        };
-        checkLeft(row, col - 1);
-
-        // Check moves to the right of the board
-        const checkRight = (row, col) => {
-            if (col >= this.board[0].length) return;
-            const piece = this.board[row][col];
-            if (!piece || piece.color !== this.color) {
-                moves.push([row, col]);
-            }
-            if (!piece) {
-                checkRight(row, col + 1);
-            }
-        };
-        checkRight(row, col + 1);
+        for(let dir of dirs) check(row,col,dir);
 
         return moves;
     }

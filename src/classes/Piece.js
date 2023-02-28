@@ -3,8 +3,12 @@ class Piece {
         this.color = color;
         this.board = board;
         this.position = position
-
         this.board[position[0]][position[1]] = this;
+        this.hasMoved = false;
+    }
+
+    outOfBounds(r,c){
+        return r<0||c<0||r>7||c>9;
     }
 
     move(newPosition){
@@ -13,6 +17,7 @@ class Piece {
         this.board[newRow][newCol] = this;
         this.board[oldRow][oldCol] = null;
         this.position = newPosition;
+        this.hasMoved = true;
 
         return true; // return true if legal move?
     }

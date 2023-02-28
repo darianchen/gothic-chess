@@ -4,12 +4,15 @@ import { useState } from 'react';
 function Board(props){
     let theBoard = props.board;
     const colors = ['black','white'];
-    const[turn, setTurn] = useState(1);
+    const [turn, setTurn] = useState(1);
 
     function handlePieceMove(piece, newPosition){
-        piece.move(newPosition);
-        setTurn(turn+1);
-        // console.log(theBoard);
+        if( piece.canMove(newPosition) && piece.color === colors[turn%2] ){
+            piece.move(newPosition);
+            setTurn(turn+1);
+        } else {
+            // handle error
+        }
     }
 
     // stuff for testing
@@ -21,6 +24,7 @@ function Board(props){
         e.preventDefault();
         if(!originSquare) originSquare = e.target.id.split(',').map((str)=>parseInt(str));
         if(!theBoard[originSquare[0]][originSquare[1]]) originSquare = null;
+
     }
 
     function selectMove(e){
