@@ -68,18 +68,27 @@ class Pawn extends Piece {
                 case 'r': new Rook(this.color,this.board,[newRow,newCol]); break;
                 case 'b': new Bishop(this.color,this.board,[newRow,newCol]); break;
                 case 'k': new Knight(this.color,this.board,[newRow,newCol]); break;
-            }
-
-
-            
+            }         
         } else {
-            this.board[newRow][newCol] = this;
-            this.board[oldRow][oldCol] = null;
             this.prevPos = this.position; // this is the added line
+            const prevDestination = this.board[newRow][newCol];
+            const oldPosition = this.position;
+            const oldHasMoved = this.hasMoved;
+            this.board[newRow][newCol] = this; // destination
+            this.board[oldRow][oldCol] = null; // origin
             this.position = newPosition;
             this.hasMoved = true;
+            if(this.inCheck()) { 
+                this.board[oldRow][oldCol] = this;
+                this.position = oldPosition;
+                this.board[newRow][newCol] = prevDestination;
+                this.hasMoved = oldHasMoved;
+                return false; 
+            }
+            if(oldCol !== newCol && !prevDestination){
+                this.board[oldRow][newCol].delete();
+            }
         }
-
         return true; // return true if legal move?
     }
 }

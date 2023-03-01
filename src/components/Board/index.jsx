@@ -8,8 +8,7 @@ function Board(props){
 
     function handlePieceMove(piece, newPosition){
         if( piece.canMove(newPosition) && piece.color === colors[turn%2] ){
-            piece.move(newPosition);
-            setTurn(turn+1);
+            if(piece.move(newPosition)) setTurn(turn+1);
         } else {
             // handle error
         }

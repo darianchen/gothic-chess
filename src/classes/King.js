@@ -10,14 +10,8 @@ class King extends Piece {
         } else {
             this.image = blackKing;
         }
+        this.isKing = true;
     }
-
-    notIntoCheck(r,c){
-        // loop through this.board
-        // check every enemy piece
-        // see if enemy piece can attack king
-    }
-
 
     availableMoves() {
         const [row, col] = this.position;
@@ -25,16 +19,15 @@ class King extends Piece {
 
         const dirs = [[0,1],[0,-1],[-1,0],[1,0],[-1,1],[-1,-1],[1,1],[1,-1]];
 
-
         const check = (r,c,dir) => {
             const [newRow,newCol] = [r+dir[0],c+dir[1]];
             if(this.outOfBounds(newRow,newCol)) return;
             if(this.board[newRow][newCol]){
                 if(this.board[newRow][newCol].color !== this.color) moves.push([newRow,newCol]);
             }
-            else {
+            else{
                 moves.push([newRow, newCol]);
-            }
+            }            
         };
 
         for(let dir of dirs) check(row,col,dir);
@@ -42,13 +35,6 @@ class King extends Piece {
         // add castling to moves
         return moves;
     }
-
-    castle(){
-
-    }
-
-
-
 }
 
 export default King;
