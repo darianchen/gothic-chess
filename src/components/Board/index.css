@@ -28,6 +28,10 @@
     background-color: red;
 }
 
-img {
+img{
     pointer-events: none;
+}
+
+.has-name{
+    cursor: pointer;
 }

@@ -43,7 +43,7 @@ function Board(props){
                     return <div className="row" key={rowIdx}>
                         {theRow.map( (theCol,colIdx)=>{
                             return <div 
-                                        className={colors[(rowIdx+colIdx)%2]}
+                                        className={`${colors[(rowIdx+colIdx)%2]} ${theBoard[rowIdx][colIdx] ? "has-name" : ""}`}
                                         id={[rowIdx,colIdx]} key={colIdx}
                                         onMouseDown={selectPiece}
                                         onMouseUp={selectMove}
