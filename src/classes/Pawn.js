@@ -1,6 +1,13 @@
 import Piece from "./Piece";
 import whitePawn from '../assets/Images/white_pawn.png';
 import blackPawn from '../assets/Images/black_pawn.png';
+import Queen from "./Queen";
+import Empress from "./Empress";
+import Princess from "./Princess";
+import Rook from "./Rook";
+import Bishop from "./Bishop";
+import Knight from "./Knight";
+
 
 class Pawn extends Piece {
     constructor(color,board,position){
@@ -42,20 +49,36 @@ class Pawn extends Piece {
             }
         }
 
-        // promotion
-
         return moves;
     }
 
-    // just for pawns, sothey can have prevpos
+    // just for pawns, so they can have prevpos and promotion
     move(newPosition){
         const [oldRow, oldCol] = this.position;
         const [newRow, newCol] = newPosition;
-        this.board[newRow][newCol] = this;
-        this.board[oldRow][oldCol] = null;
-        this.prevPos = this.position; // this is the added line
-        this.position = newPosition;
-        this.hasMoved = true;
+
+        if(newRow===0 || newRow===7){
+            this.board[this.position[0]][this.position[1]] = null;
+            let type = prompt('Select a new piece: Queen, Empress, Princess, Rook, Bishop, or Knight', 'Queen')[0].toLowerCase();
+            // console.log(type)
+            switch(type){   
+                case 'q': new Queen(this.color,this.board,[newRow,newCol]); break;
+                case 'e': new Empress(this.color,this.board,[newRow,newCol]); break;
+                case 'p': new Princess(this.color,this.board,[newRow,newCol]); break;
+                case 'r': new Rook(this.color,this.board,[newRow,newCol]); break;
+                case 'b': new Bishop(this.color,this.board,[newRow,newCol]); break;
+                case 'k': new Knight(this.color,this.board,[newRow,newCol]); break;
+            }
+
+
+            
+        } else {
+            this.board[newRow][newCol] = this;
+            this.board[oldRow][oldCol] = null;
+            this.prevPos = this.position; // this is the added line
+            this.position = newPosition;
+            this.hasMoved = true;
+        }
 
         return true; // return true if legal move?
     }
