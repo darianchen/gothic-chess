@@ -34,11 +34,10 @@ function App() {
     new King('black',board,[0,5]);
     new King('white',board,[7,5]);
 
-    let col = 0
-    while(col <= 9){
+    
+    for(let col=0;col <= 9;col++){
       new Pawn('white',board,[6,col]);
       new Pawn('black',board,[1,col]);
-      col++;
     }
   }
 
