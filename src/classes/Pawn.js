@@ -17,6 +17,15 @@ class Pawn extends Piece {
         // check every enemy piece
         // see if enemy piece can attack king
     }
+
+    availableMoves() {
+        const [row, col] = this.position;
+        const moves = [];
+        const forwardDir = this.color === "white" ? -1 : 1; // the direction in which the pawn moves forward
+        const startRow = this.color === "white" ? 6 : 1; // the row on which the pawn starts
+        const newRow = row + forwardDir;
+        const doubleNextRow = row + 2 * forwardDir;
+    }
 }
 
 export default Pawn;
