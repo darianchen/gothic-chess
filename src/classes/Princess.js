@@ -25,7 +25,7 @@ class Princess extends Piece {
                 if(this.board[newRow][newCol].color !== this.color) moves.push([newRow,newCol]);
                 return;
             }
-            else if(!this.outOfBounds(newRow,newCol) && Math.abs(dir[0]) === 2 || Math.abs(dir[1]) === 2){
+            else if (dir.some(d => Math.abs(d) === 2)) {
                 moves.push([newRow,newCol]);
             } 
             else {
@@ -37,11 +37,6 @@ class Princess extends Piece {
         for(let dir of dirs) check(row,col,dir);
 
         return moves;
-    }
-
-    canMove(newPos) {
-        const moves = this.availableMoves();
-        return moves.some(move => move[0] === newPos[0] && move[1] === newPos[1]);
     }
 }
 

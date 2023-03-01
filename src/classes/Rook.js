@@ -35,10 +35,6 @@ class Rook extends Piece {
         return moves;
     }
 
-    canMove(newPos) {
-        const moves = this.availableMoves();
-        return moves.some(move => move[0] === newPos[0] && move[1] === newPos[1]);
-    }
 }
 
 export default Rook;
