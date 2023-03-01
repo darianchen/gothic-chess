@@ -37,7 +37,7 @@ function Board(props){
 
     return(
         <>
-            <h1>This is the Board</h1>
+            <h1>Gothic Chess</h1>
             <h1>It's {colors[turn%2]}'s turn.</h1>
             <div>
                 {theBoard.map((theRow,rowIdx)=>{

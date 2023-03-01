@@ -25,7 +25,7 @@ class Empress extends Piece {
                 if(this.board[newRow][newCol].color !== this.color) moves.push([newRow,newCol]);
                 return;
             }
-            else if((dir[0]+dir[1])%2===1){
+            else if (dir.some(d => Math.abs(d) === 2)){
                 moves.push([newRow,newCol]);
             }
             else {

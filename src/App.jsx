@@ -6,6 +6,8 @@ import Bishop from './classes/Bishop';
 import Princess from './classes/Princess';
 import Empress from './classes/Empress';
 import Queen from './classes/Queen';
+import King from './classes/King';
+import Pawn from './classes/Pawn';
 
 function App() {
   const board = new Array(8).fill().map(()=> new Array(10).fill(null));
@@ -29,6 +31,15 @@ function App() {
     new Knight('white',board,[7,8]);
     new Bishop('white',board,[7,2]);
     new Bishop('white',board,[7,7]);
+    new King('black',board,[0,5]);
+    new King('white',board,[7,5]);
+
+    let col = 0
+    while(col <= 9){
+      new Pawn('white',board,[6,col]);
+      new Pawn('black',board,[1,col]);
+      col++;
+    }
   }
 
   startGame();
