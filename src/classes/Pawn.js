@@ -59,8 +59,13 @@ class Pawn extends Piece {
 
         if(newRow===0 || newRow===7){
             this.board[this.position[0]][this.position[1]] = null;
-            let type = prompt('Select a new piece: Queen, Empress, Princess, Rook, Bishop, or Knight', 'Queen')[0].toLowerCase();
-            // console.log(type)
+            let type;
+            const pieces = ['q','e','p','r','b','k'];
+
+            while(!pieces.includes(type)){
+                type = prompt('Select a new piece: Queen, Empress, Princess, Rook, Bishop, or Knight', 'Queen')[0].toLowerCase();
+            }         
+
             switch(type){   
                 case 'q': new Queen(this.color,this.board,[newRow,newCol]); break;
                 case 'e': new Empress(this.color,this.board,[newRow,newCol]); break;
@@ -68,7 +73,8 @@ class Pawn extends Piece {
                 case 'r': new Rook(this.color,this.board,[newRow,newCol]); break;
                 case 'b': new Bishop(this.color,this.board,[newRow,newCol]); break;
                 case 'k': new Knight(this.color,this.board,[newRow,newCol]); break;
-            }         
+            }
+
         } else {
             this.prevPos = this.position; // this is the added line
             const prevDestination = this.board[newRow][newCol];
