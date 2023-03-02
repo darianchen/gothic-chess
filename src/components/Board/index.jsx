@@ -8,7 +8,8 @@ function Board(props){
     const [turn, setTurn] = useState(1);
     const [isFlipped, setIsFlipped] = useState(false);
     const [numPieces, setNumPieces] = useState(40);
-
+    const captureAudio = new Audio('https://raw.githubusercontent.com/darianchen/gothic-chess/main/src/assets/Audio/capture.mp3');
+    const moveAudio = new Audio('https://raw.githubusercontent.com/darianchen/gothic-chess/main/src/assets/Audio/move.mp3');
     function handlePieceMove(piece, newPosition){
         if( piece.canMove(newPosition) && piece.color === colors[turn%2] ){
             if(piece.move(newPosition)) {
@@ -16,10 +17,8 @@ function Board(props){
                 const newNumPieces = calculateNumPieces(theBoard);
                 setNumPieces(newNumPieces);
                 if(newNumPieces !== numPieces) {
-                    let captureAudio = new Audio('https://raw.githubusercontent.com/darianchen/gothic-chess/main/src/assets/Audio/capture.mp3');
                     captureAudio.play();
                 } else {
-                    let moveAudio = new Audio('https://raw.githubusercontent.com/darianchen/gothic-chess/main/src/assets/Audio/move.mp3');
                     moveAudio.play();
                 }
             }

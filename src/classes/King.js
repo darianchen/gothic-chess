@@ -13,7 +13,7 @@ class King extends Piece {
         this.isKing = true;
     }
 
-    availableMoves() {
+    availableMoves(skipCastle = false) {
         const [row, col] = this.position;
         const moves = [];
 
@@ -42,54 +42,23 @@ class King extends Piece {
         // check if squares king moving through are in check
         // finally, move king and rook
 
-        const isUnderAttack = this.isUnderAttack.bind(this);
-        const color = this.color === 'white' ? 'black' : 'white';
-        // kingside 
-        if(this.isKing && !this.hasMoved && this.board[row][9] && !this.board[row][9].hasMoved && this.board[row][9].isRook
-        && !this.board[row][6] && !this.board[row][7] && !this.board[row][8]
-        && isUnderAttack(row,6, color)
-        && isUnderAttack(row,7,color)
-        && isUnderAttack(row,8,color)
-        ){
-           moves.push([row,8]);
-        } 
-        // queenside
-        else if(this.isKing && !this.hasMoved && this.board[row][0] && !this.board[row][0].hasMoved && this.board[row][0].isRook
-        && !this.board[row][1] && !this.board[row][2] && !this.board[row][3] && !this.board[row][4]
-        && isUnderAttack(row,2,color)
-        && isUnderAttack(row,3,color)
-        && isUnderAttack(row,4,color)){
-            moves.push([row,2]);
-        }
-        return moves;
-        }
+        // don't need to check if king because already in king class
+        // if rook has not moved, then no need to check if it's a rook
+        // castle white king, check if black king can castle, this causes loop
 
-        isUnderAttack(row, col, color) {
-            // check if the specified position is being attacked by a piece of the specified color
-            for (let r = 0; r < 8; r++) {
-              for (let c = 0; c < 10; c++) {
-                const piece = this.board[r][c];
-                if (piece && piece.color !== color) {
-                  if (piece instanceof King) {
-                    // Kings can only move one square in any direction and cannot move into check
-                    const kingDirs = [[0,1], [0,-1], [1,0], [-1,0], [1,1], [-1,-1], [1,-1], [-1,1]];
-                    for (let [dr, dc] of kingDirs) {
-                      const [newRow, newCol] = [r + dr, c + dc];
-                      if (!this.outOfBounds(newRow, newCol) && this.board[newRow][newCol] === this) {
-                        return true;
-                      }
-                    }
-                  } else {
-                    const moves = piece.availableMoves();
-                    if (moves.some(move => move[0] === row && move[1] === col)) {
-                      return true;
-                    }
-                  }
+        if(!skipCastle){
+            for(let side of [-1,1]){
+                const rookCol = side === -1 ? 0 : 9
+                if(!this.hasMoved && this.board[row][rookCol] && !this.board[row][rookCol].hasMoved){
+                    let canCastle = true;
+                    for(let colChange = 0; colChange < 4; colChange++) 
+                    if(this.inCheck(row,col + (colChange * side))) canCastle = false;
+                    if(canCastle) moves.push([row, col + (3 * side)]);
                 }
-              }
             }
-            return false;
-        }                      
+        };        
+        return moves;
+    }              
 };
 
 export default King;

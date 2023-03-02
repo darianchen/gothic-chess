@@ -13,21 +13,11 @@ class Piece {
 
     move(newPosition){
         // kingside
-        if(!this.inCheck() && this.isKing && !this.hasMoved && newPosition[1] === 8) {
-            const king = this.board[newPosition[0]][5];
-            this.board[newPosition[0]][5].delete();
-            this.board[newPosition[0]][8] = king;
-            const rook = this.board[newPosition[0]][9];
-            this.board[newPosition[0]][9].delete();
-            this.board[newPosition[0]][7] = rook;
+        if(this.isKing && !this.hasMoved && newPosition[1] === 8) {
+            this.board[newPosition[0]][9].move([newPosition[0],7]);
         // queenside
-        } else if(!this.inCheck() && this.isKing && !this.hasMoved && newPosition[1] === 2) {
-            const king = this.board[newPosition[0]][5];
-            this.board[newPosition[0]][5].delete();
-            this.board[newPosition[0]][2] = king;
-            const rook = this.board[newPosition[0]][0];
-            this.board[newPosition[0]][0].delete();
-            this.board[newPosition[0]][3] = rook;
+        } else if(this.isKing && !this.hasMoved && newPosition[1] === 2) {
+            this.board[newPosition[0]][0].move([newPosition[0],3]);
         }
         const [oldRow, oldCol] = this.position;
         const [newRow, newCol] = newPosition;
@@ -58,27 +48,30 @@ class Piece {
         return moves.some(move => move[0] === newPos[0] && move[1] === newPos[1]);
     }
 
-    inCheck(){
-        let king = null;
-        for(let row = 0; row < 8; row++){
-            for(let col = 0; col < 10; col++){
-                if(this.board[row][col] && this.board[row][col].color === this.color && this.board[row][col].isKing){
-                    king = this.board[row][col];
+    inCheck(targetRow,targetCol){
+        if(targetRow === undefined || targetCol === undefined){
+            for(let row = 0; row < 8; row++){
+                for(let col = 0; col < 10; col++){
+                    if(this.board[row][col] && this.board[row][col].color === this.color && this.board[row][col].isKing){
+                        targetRow = row;
+                        targetCol = col;
+                    }
                 }
             }
-        }
+        };
 
         for(let row = 0; row < 8; row++){
             for(let col = 0; col < 10; col++){
                 const piece = this.board[row][col];
-                if (piece && piece.color !== this.color && piece.availableMoves().some(move => {
+
+                if (piece && piece.color !== this.color && piece.availableMoves(true).some(move => {
                     const [r, c] = move;
-                    return r === king.position[0] && c === king.position[1];
+                    return r === targetRow && c === targetCol;
                   })) {
                     return true;
                   }
             }
-        }
+        };
         return false;
     }
 }

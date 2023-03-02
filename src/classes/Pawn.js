@@ -20,12 +20,6 @@ class Pawn extends Piece {
         this.prevPos = position;
     }
 
-    notIntoCheck(r,c){
-        // loop through this.board
-        // check every enemy piece
-        // see if enemy piece can attack king
-    }
-
     availableMoves() {
         const [row, col] = this.position;
         const moves = [];
