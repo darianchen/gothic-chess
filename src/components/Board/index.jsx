@@ -7,15 +7,33 @@ function Board(props){
     const tileColors = ['white','black']
     const [turn, setTurn] = useState(1);
     const [isFlipped, setIsFlipped] = useState(false);
+    const [numPieces, setNumPieces] = useState(40);
 
     function handlePieceMove(piece, newPosition){
         if( piece.canMove(newPosition) && piece.color === colors[turn%2] ){
-            if(piece.move(newPosition)) setTurn(turn+1);
+            if(piece.move(newPosition)) {
+                setTurn(turn+1);
+                const newNumPieces = calculateNumPieces(theBoard);
+                setNumPieces(newNumPieces);
+                if(newNumPieces !== numPieces) {
+                    let captureAudio = new Audio('src/assets/Audio/capture.mp3');
+                    captureAudio.play();
+                } else {
+                    let moveAudio = new Audio('src/assets/Audio/move.mp3');
+                    moveAudio.play();
+                }
+            }
         } else {
             // handle error
         }
-    }
+    }      
 
+    function calculateNumPieces(board) {
+        return board.reduce((count, row) => {
+          return count + row.filter(square => square != null).length;
+        }, 0);
+      }
+            
     // stuff for testing
     window.handlePieceMove = handlePieceMove;
     window.board = theBoard;
