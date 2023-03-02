@@ -32,6 +32,10 @@ img{
     pointer-events: none;
 }
 
-.has-name{
+.has-piece{
     cursor: pointer;
+}
+
+.flip {
+    transform: rotate(180deg);
 }

@@ -4,7 +4,9 @@ import { useState } from 'react';
 function Board(props){
     let theBoard = props.board;
     const colors = ['black','white'];
+    const tileColors = ['white','black']
     const [turn, setTurn] = useState(1);
+    const [isFlipped, setIsFlipped] = useState(false);
 
     function handlePieceMove(piece, newPosition){
         if( piece.canMove(newPosition) && piece.color === colors[turn%2] ){
@@ -34,16 +36,21 @@ function Board(props){
         originSquare = null;
     }
 
+    function flipBoard(){
+        setIsFlipped(!isFlipped);
+    }
+
     return(
         <>
             <h1>Gothic Chess</h1>
             <h1>It's {colors[turn%2]}'s turn.</h1>
-            <div>
+            <button onClick={flipBoard}>Flip</button>
+            <div className={`my-component ${isFlipped ? 'flip' : ''}`}>
                 {theBoard.map((theRow,rowIdx)=>{
                     return <div className="row" key={rowIdx}>
                         {theRow.map( (theCol,colIdx)=>{
                             return <div 
-                                        className={`${colors[(rowIdx+colIdx)%2]} ${theBoard[rowIdx][colIdx] ? "has-name" : ""}`}
+                                        className={`${tileColors[(rowIdx+colIdx)%2]} ${theBoard[rowIdx][colIdx] ? "has-piece" : ""} ${isFlipped ? 'flip' : ''}`}
                                         id={[rowIdx,colIdx]} key={colIdx}
                                         onMouseDown={selectPiece}
                                         onMouseUp={selectMove}
