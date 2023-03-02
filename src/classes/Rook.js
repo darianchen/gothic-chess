@@ -10,6 +10,7 @@ class Rook extends Piece {
         } else {
             this.image = blackRook;
         }
+        this.isRook = true;
     }
 
     availableMoves() {

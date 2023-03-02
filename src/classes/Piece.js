@@ -12,6 +12,18 @@ class Piece {
     }
 
     move(newPosition){
+        // kingside
+        if(this.isKing && !this.hasMoved && newPosition[1] === 8) {
+            const rook = this.board[newPosition[0]][9];
+            this.board[newPosition[0]][9].delete();
+            this.board[newPosition[0]][7] = rook;
+        // queenside
+        } else if(this.isKing && !this.hasMoved && newPosition[1] === 2) {
+            const rook = this.board[newPosition[0]][0];
+            this.board[newPosition[0]][0].delete();
+            this.board[newPosition[0]][3] = rook;
+        }
+
         const [oldRow, oldCol] = this.position;
         const [newRow, newCol] = newPosition;
         const prevDestination = this.board[newRow][newCol];
