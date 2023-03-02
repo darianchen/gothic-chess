@@ -16,10 +16,10 @@ function Board(props){
                 const newNumPieces = calculateNumPieces(theBoard);
                 setNumPieces(newNumPieces);
                 if(newNumPieces !== numPieces) {
-                    let captureAudio = new Audio('src/assets/Audio/capture.mp3');
+                    let captureAudio = new Audio('https://raw.githubusercontent.com/darianchen/gothic-chess/main/src/assets/Audio/capture.mp3');
                     captureAudio.play();
                 } else {
-                    let moveAudio = new Audio('src/assets/Audio/move.mp3');
+                    let moveAudio = new Audio('https://raw.githubusercontent.com/darianchen/gothic-chess/main/src/assets/Audio/move.mp3');
                     moveAudio.play();
                 }
             }
