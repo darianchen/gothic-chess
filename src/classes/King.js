@@ -32,20 +32,6 @@ class King extends Piece {
 
         for(let dir of dirs) check(row,col,dir);
 
-        // castling
-        // check if piece is king
-        // check if other piece is rook
-        // check if king has moved
-        // check if king is in check
-        // check if rook has moved
-        // check if squares between are empty
-        // check if squares king moving through are in check
-        // finally, move king and rook
-
-        // don't need to check if king because already in king class
-        // if rook has not moved, then no need to check if it's a rook
-        // castle white king, check if black king can castle, this causes loop
-
         if(!skipCastle){
             for(let side of [-1,1]){
                 const rookCol = side === -1 ? 0 : 9
