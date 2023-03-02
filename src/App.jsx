@@ -34,11 +34,22 @@ function App() {
     new King('black',board,[0,5]);
     new King('white',board,[7,5]);
 
-    
     for(let col=0;col <= 9;col++){
       new Pawn('white',board,[6,col]);
       new Pawn('black',board,[1,col]);
     }
+
+
+    // create board to test castling
+    // must also change number of pieces in board component
+
+    // new Rook('black',board,[0,0]);
+    // new Rook('black',board,[0,9]);
+    // new King('black',board,[0,5]);
+    // new Knight('white',board,[6,1]);
+    // new Rook('white',board,[7,0]);
+    // new King('white',board,[7,5]);
+    // new Rook('white',board,[7,9]);
   }
 
   startGame();
