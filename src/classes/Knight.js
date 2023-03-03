@@ -10,6 +10,7 @@ class Knight extends Piece {
         } else {
             this.image = blackKnight;
         }
+        this.letter = 'N';
     }
 
     availableMoves() {

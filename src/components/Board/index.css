@@ -39,3 +39,8 @@ img{
 .flip {
     transform: rotate(180deg);
 }
+
+.move-log-holder {
+    display: flex;
+    align-items: start;
+}

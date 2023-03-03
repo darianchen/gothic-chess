@@ -10,6 +10,7 @@ class Bishop extends Piece {
         } else {
             this.image = blackBishop;
         }
+        this.letter = 'B';
     }
 
     availableMoves() {

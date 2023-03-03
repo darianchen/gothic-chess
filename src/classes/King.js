@@ -13,6 +13,7 @@ class King extends Piece {
             this.image = blackKing;
         }
         this.isKing = true;
+        this.letter = 'K';
     }
 
     availableMoves(skipCastle = false) {

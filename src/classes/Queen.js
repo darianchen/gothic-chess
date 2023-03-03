@@ -10,6 +10,7 @@ class Queen extends Piece {
         } else {
             this.image = blackQueen;
         }
+        this.letter = 'Q';
     }
 
     availableMoves() {

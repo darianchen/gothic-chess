@@ -18,6 +18,7 @@ class Pawn extends Piece {
             this.image = blackPawn;
         }
         this.prevPos = position;
+        this.letter = '';
     }
 
     availableMoves() {

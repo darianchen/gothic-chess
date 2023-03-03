@@ -10,6 +10,7 @@ class Princess extends Piece {
         } else {
             this.image = blackPrincess;
         }
+        this.letter = 'P';
     }
 
     availableMoves() {

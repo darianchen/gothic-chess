@@ -52,11 +52,12 @@ function App() {
     // new Rook('white',board,[7,9]);
   }
 
+  const moveLog = [];
   startGame();
 
   return (
     <div className="App">
-      <Board board={board}/>
+      <Board board={board} moveLog={moveLog}/>
     </div>
   )
 }
