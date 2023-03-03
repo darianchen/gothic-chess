@@ -12,12 +12,15 @@ class Piece {
     }
 
     move(newPosition){
+        let castle = false;
         // kingside
         if(this.isKing && !this.hasMoved && newPosition[1] === 8) {
-            this.board[newPosition[0]][9].move([newPosition[0],7]);
+            this.board[newPosition[0]][9].move([newPosition[0],7]); // change the position of the rook
+            castle = true;
         // queenside
         } else if(this.isKing && !this.hasMoved && newPosition[1] === 2) {
-            this.board[newPosition[0]][0].move([newPosition[0],3]);
+            this.board[newPosition[0]][0].move([newPosition[0],3]); // change the position of the rook
+            castle = true;
         }
         const [oldRow, oldCol] = this.position;
         const [newRow, newCol] = newPosition;
@@ -35,7 +38,8 @@ class Piece {
             this.hasMoved = oldHasMoved;
             return false; 
         }
-        return true; // return true if legal move?
+        return [true, castle]; // return true if legal move?
+        // return false for castling
     }
 
     delete(){

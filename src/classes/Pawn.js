@@ -90,7 +90,8 @@ class Pawn extends Piece {
                 this.board[oldRow][newCol].delete();
             }
         }
-        return true; // return true if legal move?
+        return [true,false]; // return true if legal move?
+        // return false for castling
     }
 }
 

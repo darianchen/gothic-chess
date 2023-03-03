@@ -1,5 +1,5 @@
 import './index.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import King from '../../classes/King'; 
 import blackKingChecked from '../../assets/Images/black_king_check.png';
 import whiteKingChecked from '../../assets/Images/white_king_check.png';
@@ -21,6 +21,9 @@ function Board(props){
     const [numPieces, setNumPieces] = useState(40);
     const captureAudio = new Audio('https://raw.githubusercontent.com/darianchen/gothic-chess/main/src/assets/Audio/capture.mp3');
     const moveAudio = new Audio('https://raw.githubusercontent.com/darianchen/gothic-chess/main/src/assets/Audio/move.mp3');
+    const castleAudio = new Audio('https://raw.githubusercontent.com/darianchen/gothic-chess/main/src/assets/Audio/castle.mp3');
+    const checkAudio = new Audio('https://raw.githubusercontent.com/darianchen/gothic-chess/main/src/assets/Audio/check.mp3');
+
 
     function handlePieceMove(piece, newPosition){
         let thisMove = ''
@@ -29,24 +32,24 @@ function Board(props){
         thisMove += piece.letter;
         
         if( piece.canMove(newPosition) && piece.color === colors[turn%2] ){
-            if(piece.move(newPosition)) {
+            const move = piece.move(newPosition);
+            if(move[0]) {
                 setTurn(turn+1);
+                const numberOfPiecesOnBoard = calculateNumPieces(theBoard);
+                setNumPieces(numberOfPiecesOnBoard);     
+                const kingIsInCheck = updateCheckedKingImage(theBoard);
                 
-                const newNumPieces = calculateNumPieces(theBoard);
-                setNumPieces(newNumPieces);
-                updateCheckedKingImage(theBoard);
-
-                if(newNumPieces !== numPieces) {
-                    captureAudio.play();
-                    if(!piece.letter) thisMove+=cols[oldCol];
-                    thisMove += 'x'
+                if (numberOfPiecesOnBoard !== numPieces) {
+                  kingIsInCheck ? checkAudio.play() : captureAudio.play();
+                  thisMove += !piece.letter ? cols[oldCol] : '';
+                  thisMove += 'x';
                 } else {
-                    moveAudio.play();
+                  kingIsInCheck ? checkAudio.play() : 
+                  move[1] ? castleAudio.play() : moveAudio.play();
                 }
                 thisMove += cols[newPosition[1]];
                 thisMove += rows[newPosition[0]];
                 moveLog.push(thisMove);
-                // console.log(moveLog);
             }
         } else {
             // handle error
@@ -59,15 +62,21 @@ function Board(props){
         if (king) {
             king.image = (king.color === 'white') ? whiteKingChecked :
             (king.color === 'black') ? blackKingChecked : king.image;
-        }          
+            return true;
+        }
+        return false;          
     }
 
     function calculateNumPieces(board) {
         return board.reduce((count, row) => {
           return count + row.filter(square => square != null).length;
         }, 0);
-      }
-            
+    }
+
+    function checkStalemate(board){
+        
+    }
+  
     // stuff for testing
     window.handlePieceMove = handlePieceMove;
     window.board = theBoard;
@@ -79,9 +88,10 @@ function Board(props){
         if(!theBoard[originSquare[0]][originSquare[1]]) originSquare = null;
     }
 
+    let destinationSquare = null;
     function selectMove(e){
         if(originSquare){
-            const destinationSquare = e.target.id.split(',').map((str)=>parseInt(str));
+            destinationSquare = e.target.id.split(',').map((str)=>parseInt(str));
             handlePieceMove(theBoard[originSquare[0]][originSquare[1]], destinationSquare)
         }
         originSquare = null;
@@ -100,7 +110,7 @@ function Board(props){
     }
 
     return(
-        <>
+        <> 
             <h1>Gothic Chess</h1>
             <h1>It's {colors[turn%2]}'s turn.</h1>
             <button onClick={flipBoard}>Flip</button>
