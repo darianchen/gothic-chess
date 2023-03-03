@@ -1,5 +1,8 @@
 import './index.css';
 import { useState } from 'react';
+import King from '../../classes/King'; 
+import blackKingChecked from '../../assets/Images/black_king_check.png';
+import whiteKingChecked from '../../assets/Images/white_king_check.png';
 
 function Board(props){
     let theBoard = props.board;
@@ -16,6 +19,7 @@ function Board(props){
                 setTurn(turn+1);
                 const newNumPieces = calculateNumPieces(theBoard);
                 setNumPieces(newNumPieces);
+                updateCheckedKingImage(theBoard);
                 if(newNumPieces !== numPieces) {
                     captureAudio.play();
                 } else {
@@ -26,6 +30,14 @@ function Board(props){
             // handle error
         }
     }      
+
+    function updateCheckedKingImage(board) {
+        const king = board.flat().find((piece) => piece instanceof King && piece.inCheck(piece.position[0], piece.position[1]));
+        if (king) {
+            king.image = (king.color === 'white') ? whiteKingChecked :
+            (king.color === 'black') ? blackKingChecked : king.image;
+          }          
+    }
 
     function calculateNumPieces(board) {
         return board.reduce((count, row) => {
