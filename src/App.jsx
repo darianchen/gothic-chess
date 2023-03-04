@@ -50,6 +50,17 @@ function App() {
     // new Rook('white',board,[7,0]);
     // new King('white',board,[7,5]);
     // new Rook('white',board,[7,9]);
+
+    // create a board to test stalemate
+
+    // new Rook('black',board,[5,3]);
+    // new King('black',board,[1,9]);
+    // new King('white',board,[7,4]);
+    // // new Rook('white',board,[7,5]);
+    // new Queen('white',board,[6,8]);
+    // new Queen('white',board,[3,3]);
+    // new Pawn('black',board,[1,1]);
+    // new Knight('white',board,[2,1])
   }
 
   const moveLog = [];

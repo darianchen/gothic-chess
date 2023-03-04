@@ -1,5 +1,5 @@
 :root {
-    --dimension: 101px;
+    --dimension: 100px;
     --light-color: beige;
     --dark-color: darkgray;
 }
@@ -54,7 +54,7 @@ img{
 .notation {
     z-index: 1000;
     position: absolute;
-    font-weight: 800;
+    font-weight: 600;
 }
   
 .number {

@@ -24,6 +24,12 @@ function Board(props){
     const castleAudio = new Audio('https://raw.githubusercontent.com/darianchen/gothic-chess/main/src/assets/Audio/castle.mp3');
     const checkAudio = new Audio('https://raw.githubusercontent.com/darianchen/gothic-chess/main/src/assets/Audio/check.mp3');
 
+    useEffect(() => {
+        if (isStalemate(theBoard, updateCheckedKingImage(theBoard))){
+            window.alert('Stalemate');
+        };
+    })
+
 
     function handlePieceMove(piece, newPosition){
         let thisMove = ''
@@ -73,8 +79,28 @@ function Board(props){
         }, 0);
     }
 
-    function checkStalemate(board){
-        
+    function isStalemate(board, kingIsInCheck){
+        if(!kingIsInCheck){
+            const color = colors[turn%2];
+            for(let rank = 0; rank < 8; rank++){
+                for(let file = 0; file < 10; file++){
+                    let piece = null;
+                    if(board[rank][file]) piece = board[rank][file];
+                    if(piece && piece.color === color){
+                        let availableMoves = piece.availableMoves();
+                        for(let i = 0; i < availableMoves.length; i++){
+                            const[row, col] = availableMoves[i];
+                            if(!piece.inCheck(row,col)) {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+        } else{
+            return false;
+        }
+        return true;
     }
   
     // stuff for testing
