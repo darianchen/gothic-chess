@@ -1,3 +1,5 @@
+import './MoveLog.css';
+
 function MoveLog(props) {
     let moveLog = props.moveLog;
     let turn = props.turn;

@@ -120,12 +120,14 @@ function Board(props){
                         return <div className="row" key={rowIdx}>
                             {theRow.map( (theCol,colIdx)=>{
                                 return <div 
-                                            className={`${colors[(rowIdx+colIdx+1)%2]} ${theBoard[rowIdx][colIdx] ? "has-piece" : ""} ${isFlipped ? 'flip' : ''}`}
+                                            className={` tile ${colors[(rowIdx+colIdx+1)%2]} ${theBoard[rowIdx][colIdx] ? "has-piece" : ""} ${isFlipped ? 'flip' : ''}`}
                                             id={[rowIdx,colIdx]} key={colIdx}
                                             onMouseDown={selectPiece}
                                             onMouseUp={selectMove}
                                         >
                                     {theBoard[rowIdx][colIdx] ? <img src={theBoard[rowIdx][colIdx].image}></img> : ''}
+                                    {colIdx ===  (isFlipped ? 0 : 9) ? <div className={`notation number ${(isFlipped ? (rowIdx % 2 === 1) : (rowIdx % 2 === 0)) ? 'light-sq-notation-color' : 'dark-sq-notation-color'}`}>{rowIdx + 1}</div> : ''}
+                                    {rowIdx ===  (isFlipped ? 0 : 7) ? <div className={`notation letter ${(isFlipped ? (colIdx % 2 === 1) : (colIdx % 2 === 0)) ? 'light-sq-notation-color' : 'dark-sq-notation-color'}`}>{cols[colIdx]}</div> : ''}
                                 </div>
                             })}
                         </div>
