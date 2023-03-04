@@ -31,7 +31,7 @@ class Pawn extends Piece {
 
         // regular moves
         if(!this.board[row+forwardDir][col]) moves.push([row+forwardDir,col]);
-        if(!this.hasMoved && !this.board[row+2*forwardDir][col]) moves.push([row+2*forwardDir,col]);
+        if(!this.hasMoved && !this.board[row+forwardDir][col] && !this.board[row+2*forwardDir][col]) moves.push([row+2*forwardDir,col]);
         if(this.board[row+forwardDir][col+1]&&this.board[row+forwardDir][col+1].color!==this.color) moves.push([row+forwardDir,col+1]);
         if(this.board[row+forwardDir][col-1]&&this.board[row+forwardDir][col-1].color!==this.color) moves.push([row+forwardDir,col-1]);
 
@@ -90,7 +90,7 @@ class Pawn extends Piece {
                 this.board[oldRow][newCol].delete();
             }
         }
-        return [true,false]; // return true if legal move?
+        return [true, false]; // return true if legal move?
         // return false for castling
     }
 }

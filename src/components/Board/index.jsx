@@ -8,27 +8,24 @@ import MoveLog from '../MoveLog/MoveLog';
 function Board(props){
     let theBoard = props.board;
     const colors = ['black','white'];
-    // const tileColors = ['white','black']
-
     const rows = [8,7,6,5,4,3,2,1];
     const cols = 'abcdefghij'.split('');
     const moveLog = props.moveLog;
-
-
     const [turn, setTurn] = useState(1);
-
     const [isFlipped, setIsFlipped] = useState(false);
     const [numPieces, setNumPieces] = useState(40);
     const captureAudio = new Audio('https://raw.githubusercontent.com/darianchen/gothic-chess/main/src/assets/Audio/capture.mp3');
     const moveAudio = new Audio('https://raw.githubusercontent.com/darianchen/gothic-chess/main/src/assets/Audio/move.mp3');
     const castleAudio = new Audio('https://raw.githubusercontent.com/darianchen/gothic-chess/main/src/assets/Audio/castle.mp3');
     const checkAudio = new Audio('https://raw.githubusercontent.com/darianchen/gothic-chess/main/src/assets/Audio/check.mp3');
+    const stalemateAudio = new Audio('src/assets/Audio/stalemate.mp3');
 
     useEffect(() => {
-        if (isStalemate(theBoard, updateCheckedKingImage(theBoard))){
+        if (isStalemate(theBoard, isKingInCheck(theBoard))){
             window.alert('Stalemate');
+            stalemateAudio.play();
         };
-    })
+    },[turn])
 
 
     function handlePieceMove(piece, newPosition){
@@ -43,14 +40,14 @@ function Board(props){
                 setTurn(turn+1);
                 const numberOfPiecesOnBoard = calculateNumPieces(theBoard);
                 setNumPieces(numberOfPiecesOnBoard);     
-                const kingIsInCheck = updateCheckedKingImage(theBoard);
+                const kingInCheck = isKingInCheck(theBoard);
                 
                 if (numberOfPiecesOnBoard !== numPieces) {
-                  kingIsInCheck ? checkAudio.play() : captureAudio.play();
+                  kingInCheck ? checkAudio.play() : captureAudio.play();
                   thisMove += !piece.letter ? cols[oldCol] : '';
                   thisMove += 'x';
                 } else {
-                  kingIsInCheck ? checkAudio.play() : 
+                  kingInCheck ? checkAudio.play() : 
                   move[1] ? castleAudio.play() : moveAudio.play();
                 }
                 thisMove += cols[newPosition[1]];
@@ -63,7 +60,7 @@ function Board(props){
         }
     }      
 
-    function updateCheckedKingImage(board) {
+    function isKingInCheck(board) {
         const king = board.flat().find((piece) => piece instanceof King && piece.inCheck(piece.position[0], piece.position[1]));
         if (king) {
             king.image = (king.color === 'white') ? whiteKingChecked :
@@ -79,8 +76,8 @@ function Board(props){
         }, 0);
     }
 
-    function isStalemate(board, kingIsInCheck){
-        if(!kingIsInCheck){
+    function isStalemate(board, kingInCheck){
+        if(!kingInCheck){
             const color = colors[turn%2];
             for(let rank = 0; rank < 8; rank++){
                 for(let file = 0; file < 10; file++){
@@ -90,14 +87,15 @@ function Board(props){
                         let availableMoves = piece.availableMoves();
                         for(let i = 0; i < availableMoves.length; i++){
                             const[row, col] = availableMoves[i];
-                            if(!piece.inCheck(row,col)) {
+                            if(!piece.inCheck(row,col)) {  
                                 return false;
                             }
                         }
                     }
                 }
             }
-        } else{
+        }
+        else{
             return false;
         }
         return true;
