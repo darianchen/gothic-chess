@@ -18,7 +18,8 @@ function Board(props){
     const moveAudio = new Audio('https://raw.githubusercontent.com/darianchen/gothic-chess/main/src/assets/Audio/move.mp3');
     const castleAudio = new Audio('https://raw.githubusercontent.com/darianchen/gothic-chess/main/src/assets/Audio/castle.mp3');
     const checkAudio = new Audio('https://raw.githubusercontent.com/darianchen/gothic-chess/main/src/assets/Audio/check.mp3');
-    const stalemateAudio = new Audio('src/assets/Audio/stalemate.mp3');
+    const stalemateAudio = new Audio('https://raw.githubusercontent.com/darianchen/gothic-chess/main/src/assets/Audio/stalemate.mp3');
+    const checkmateAudio = new Audio('https://raw.githubusercontent.com/darianchen/gothic-chess/main/src/assets/Audio/checkmate.mp3');
 
     useEffect(() => {
         if (isStalemate(theBoard, isKingInCheck(theBoard))){
@@ -76,7 +77,7 @@ function Board(props){
         }, 0);
     }
 
-    function isStalemate(board, kingInCheck){
+    function isStalemate(board, kingInCheck){ // stalemate checkmate
         if(!kingInCheck){
             const color = colors[turn%2];
             for(let rank = 0; rank < 8; rank++){
@@ -87,7 +88,7 @@ function Board(props){
                         let availableMoves = piece.availableMoves();
                         for(let i = 0; i < availableMoves.length; i++){
                             const[row, col] = availableMoves[i];
-                            if(!piece.inCheck(row,col)) {  
+                            if(!piece.inCheck()) {  
                                 return false;
                             }
                         }
@@ -100,7 +101,7 @@ function Board(props){
         }
         return true;
     }
-  
+
     // stuff for testing
     window.handlePieceMove = handlePieceMove;
     window.board = theBoard;
@@ -150,7 +151,7 @@ function Board(props){
                                             onMouseUp={selectMove}
                                         >
                                     {theBoard[rowIdx][colIdx] ? <img src={theBoard[rowIdx][colIdx].image}></img> : ''}
-                                    {colIdx ===  (isFlipped ? 0 : 9) ? <div className={`notation number ${(isFlipped ? (rowIdx % 2 === 1) : (rowIdx % 2 === 0)) ? 'light-sq-notation-color' : 'dark-sq-notation-color'}`}>{rowIdx + 1}</div> : ''}
+                                    {colIdx ===  (isFlipped ? 0 : 9) ? <div className={`notation number ${(isFlipped ? (rowIdx % 2 === 1) : (rowIdx % 2 === 0)) ? 'light-sq-notation-color' : 'dark-sq-notation-color'}`}>{rows[rowIdx]}</div> : ''}
                                     {rowIdx ===  (isFlipped ? 0 : 7) ? <div className={`notation letter ${(isFlipped ? (colIdx % 2 === 1) : (colIdx % 2 === 0)) ? 'light-sq-notation-color' : 'dark-sq-notation-color'}`}>{cols[colIdx]}</div> : ''}
                                 </div>
                             })}

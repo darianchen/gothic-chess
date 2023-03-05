@@ -53,14 +53,13 @@ function App() {
 
     // create a board to test stalemate && checkmate
 
-    // new Rook('black',board,[5,3]);
     // new King('black',board,[1,9]);
     // new King('white',board,[7,4]);
     // // new Rook('white',board,[7,5]);
     // new Queen('white',board,[6,8]);
     // new Queen('white',board,[3,3]);
-    // new Pawn('black',board,[1,1]);
-    // new Bishop('white',board,[2,1]);
+    // new Knight('black',board,[1,1]);
+    // new Bishop('white',board,[1,3]);
   }
 
   const moveLog = [];
