@@ -1,3 +1,3 @@
 import MoveLog from './MoveLog';
-// import './MoveLog.css';
+import './MoveLog.css';
 export default MoveLog;
