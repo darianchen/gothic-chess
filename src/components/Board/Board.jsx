@@ -11,7 +11,7 @@ import Bishop from '../../classes/Bishop';
 
 import blackKingChecked from '../../assets/Images/black_king_check.png';
 import whiteKingChecked from '../../assets/Images/white_king_check.png';
-import MoveLog from '../MoveLog/MoveLog';
+import MoveLog from '../MoveLog/';
 import Navbar from '../Navbar';
 
 function Board(props){
