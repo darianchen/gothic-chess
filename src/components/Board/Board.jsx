@@ -1,12 +1,21 @@
-import './index.css';
 import { useEffect, useState } from 'react';
+
 import King from '../../classes/King'; 
+import Rook from '../../classes/Rook';
+import Queen from '../../classes/Queen';
+import Princess from '../../classes/Princess';
+import Empress from '../../classes/Empress';
+import Pawn from '../../classes/Pawn';
+import Knight from '../../classes/Knight';
+import Bishop from '../../classes/Bishop';
+
 import blackKingChecked from '../../assets/Images/black_king_check.png';
 import whiteKingChecked from '../../assets/Images/white_king_check.png';
 import MoveLog from '../MoveLog/MoveLog';
 
 function Board(props){
     let theBoard = props.board;
+
     const colors = ['black','white'];
     const rows = [8,7,6,5,4,3,2,1];
     const cols = 'abcdefghij'.split('');
@@ -28,6 +37,56 @@ function Board(props){
         };
     },[turn])
 
+    let boardHistory = props.boardHistory;
+
+    function copyBoard(board){
+        // console.log(boardHistory, 1)
+        const boardCopy = new Array(board.length).fill().map(()=> new Array(board[0].length).fill(null));
+        for(let r=0;r<board.length;r++){
+            for(let c=0;c<board[0].length;c++){
+                if(board[r][c]){
+                    let pieceCopy = {...board[r][c]};
+                    pieceCopy.board = boardCopy;
+                    
+                    boardCopy[r][c] = pieceCopy;
+                }
+            }
+        }
+        boardHistory[turn] = boardCopy;
+        // console.log(boardHistory,2)
+        return boardCopy;
+    }
+
+    const constructors = {
+        '': Pawn,
+        'R': Rook,
+        'N': Knight,
+        'B': Bishop,
+        'E': Empress,
+        'K': King,
+        'P': Princess,
+        'Q': Queen,
+    }
+    function undo(){
+        if(turn>1){
+            let copy = boardHistory[turn-1];
+
+            for(let r=0;r<copy.length;r++){
+                for(let c=0;c<copy[0].length;c++){
+                    if(!copy[r][c]){
+                        theBoard[r][c] = null;
+                    } else {
+                        let pieceCopy = {...copy[r][c]};
+                        theBoard[r][c] = new constructors[pieceCopy.letter](pieceCopy.color,theBoard,[r,c],pieceCopy.hasMoved);
+                    }
+                }
+            }
+            setTurn(turn-1);
+            moveLog.pop();
+        } else {
+            console.error("Can't undo any more.");
+        }
+    }
 
     function handlePieceMove(piece, newPosition){
         let thisMove = ''
@@ -36,9 +95,11 @@ function Board(props){
         thisMove += piece.letter;
         
         if( piece.canMove(newPosition) && piece.color === colors[turn%2] ){
+            
+            copyBoard(theBoard);
             const move = piece.move(newPosition);
             if(move[0]) {
-                setTurn(turn+1);
+
                 const numberOfPiecesOnBoard = calculateNumPieces(theBoard);
                 setNumPieces(numberOfPiecesOnBoard);     
                 const kingInCheck = isKingInCheck(theBoard);
@@ -54,6 +115,8 @@ function Board(props){
                 thisMove += cols[newPosition[1]];
                 thisMove += rows[newPosition[0]];
                 moveLog.push(thisMove);
+
+                setTurn(turn+1);
             }
         } else {
             // handle error
@@ -128,7 +191,7 @@ function Board(props){
 
     function formatMoves(moveLog){ 
         const rows = [];
-        for(let i=0;i<=moveLog.length;i+=2){
+        for(let i=0;i<moveLog.length;i+=2){
             rows.push([1+(i/2),moveLog[i],moveLog[i+1]])
         }
         return rows;
@@ -137,8 +200,10 @@ function Board(props){
     return(
         <> 
             <h1>Gothic Chess</h1>
+            <h1>Turn is {turn}.</h1>
             <h1>It's {colors[turn%2]}'s turn.</h1>
             <button onClick={flipBoard}>Flip</button>
+            <button onClick={undo}>Undo</button>
             <div className='move-log-holder'>
                 <div className={`my-component ${isFlipped ? 'flip' : ''}`}>
                     {theBoard.map((theRow,rowIdx)=>{

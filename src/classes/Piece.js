@@ -1,10 +1,10 @@
 class Piece {
-    constructor(color, board, position){
+    constructor(color, board, position, hasMoved=false){
         this.color = color;
         this.board = board;
         this.position = position
         this.board[position[0]][position[1]] = this;
-        this.hasMoved = false;
+        this.hasMoved = hasMoved;
     }
 
     outOfBounds(r,c){

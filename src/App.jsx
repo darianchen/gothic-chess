@@ -10,7 +10,7 @@ import King from './classes/King';
 import Pawn from './classes/Pawn';
 
 function App() {
-  const board = new Array(8).fill().map(()=> new Array(10).fill(null));
+  let board = new Array(8).fill().map(()=> new Array(10).fill(null));
 
   function startGame(){
     new Rook('black',board,[0,0]);
@@ -65,9 +65,11 @@ function App() {
   const moveLog = [];
   startGame();
 
+  let boardHistory = ['This is the Board History'];
+
   return (
     <div className="App">
-      <Board board={board} moveLog={moveLog}/>
+      <Board board={board} moveLog={moveLog} boardHistory={boardHistory}/>
     </div>
   )
 }
