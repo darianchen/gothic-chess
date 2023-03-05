@@ -12,6 +12,7 @@ import Bishop from '../../classes/Bishop';
 import blackKingChecked from '../../assets/Images/black_king_check.png';
 import whiteKingChecked from '../../assets/Images/white_king_check.png';
 import MoveLog from '../MoveLog/MoveLog';
+import Navbar from '../Navbar';
 
 function Board(props){
     let theBoard = props.board;
@@ -82,6 +83,7 @@ function Board(props){
                 }
             }
             setTurn(turn-1);
+            setNumPieces(calculateNumPieces(copy))
             moveLog.pop();
         } else {
             console.error("Can't undo any more.");
@@ -199,7 +201,7 @@ function Board(props){
 
     return(
         <> 
-            <h1>Gothic Chess</h1>
+            <Navbar />
             <h1>Turn is {turn}.</h1>
             <h1>It's {colors[turn%2]}'s turn.</h1>
             <button onClick={flipBoard}>Flip</button>
