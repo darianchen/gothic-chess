@@ -12,6 +12,8 @@ class Piece {
     }
 
     move(newPosition,board=this.board){
+        if(this.outOfBounds(...newPosition)) return [false]
+
         let castle = false;
         // kingside
         if(this.isKing && newPosition[1] - this.position[1] === 3) {

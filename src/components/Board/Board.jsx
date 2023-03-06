@@ -24,6 +24,9 @@ function Board(props){
     const [turn, setTurn] = useState(1);
     const [isFlipped, setIsFlipped] = useState(false);
     const [numPieces, setNumPieces] = useState(40);
+    const [whiteAi, setWhiteAi] = useState(false);
+    const [blackAi, setBlackAi] = useState(true);
+
     const captureAudio = new Audio('https://raw.githubusercontent.com/darianchen/gothic-chess/main/src/assets/Audio/capture.mp3');
     const moveAudio = new Audio('https://raw.githubusercontent.com/darianchen/gothic-chess/main/src/assets/Audio/move.mp3');
     const castleAudio = new Audio('https://raw.githubusercontent.com/darianchen/gothic-chess/main/src/assets/Audio/castle.mp3');
@@ -31,12 +34,13 @@ function Board(props){
     const stalemateAudio = new Audio('https://raw.githubusercontent.com/darianchen/gothic-chess/main/src/assets/Audio/stalemate.mp3');
     const checkmateAudio = new Audio('https://raw.githubusercontent.com/darianchen/gothic-chess/main/src/assets/Audio/checkmate.mp3');
 
-    // useEffect(() => {
-    //     if (isStalemate(theBoard, isKingInCheck(theBoard))){
-    //         window.alert('Stalemate');
-    //         stalemateAudio.play();
-    //     };
-    // },[turn])
+    useEffect(() => {
+        // if (isStalemate(theBoard, isKingInCheck(theBoard))){
+        //     window.alert('Stalemate');
+        //     stalemateAudio.play();
+        // };
+        setTimeout(tryAiMove,1000);
+    },[turn])
 
     let boardHistory = props.boardHistory;
 
@@ -93,6 +97,8 @@ function Board(props){
     }
 
     function handlePieceMove(piece, newPosition){
+        // console.log(turn,piece,newPosition)
+
         let thisMove = ''
         let oldRow = piece.position[0];
         let oldCol = piece.position[1];
@@ -126,10 +132,24 @@ function Board(props){
             }
         } else {
             // handle error
+            
             console.error('Illegal Move')
         }
         
-    }    
+    }
+    
+    function tryAiMove(){
+        const currentPlayer = colors[turn%2];
+        if((currentPlayer==='white'&&!whiteAi)||(currentPlayer==='black'&&!blackAi)) return;
+
+        const allMoves = findAvailableMoves(currentPlayer);
+        if(!allMoves.length) return; // this should go to stalemate/checkmate
+
+        const [randomPiece,randomMove] = allMoves[Math.floor(Math.random()*allMoves.length)];
+        console.log("trying to make move:",randomPiece,randomMove)
+        
+        handlePieceMove(randomPiece,randomMove);
+    }
     
     function findAvailableMoves(color){
         let allMoves = [];
@@ -139,14 +159,16 @@ function Board(props){
             for(let c=0;c<theBoard[0].length;c++){
                 if(theBoard[r][c]&&theBoard[r][c].color===color){
                     const currentPiece = theBoard[r][c];
+                    let oldPos = currentPiece.position;
 
                     for(let move of currentPiece.availableMoves()){
-                        if(!currentPiece.move([move[0],move[1]])){
-                            setBoardTo(currentBoard);
-                            continue;
-                        }
-                        if(!currentPiece.inCheck()) allMoves.push([currentPiece,move]);
+
+                        if(currentPiece.move([move[0],move[1]]) && !currentPiece.inCheck()) allMoves.push([currentPiece,move]);
+                        
+                        // reset for next test;
                         setBoardTo(currentBoard);
+                        currentPiece.position = oldPos;
+                        theBoard[r][c] = currentPiece;
                     }
                 }
             }
@@ -159,6 +181,7 @@ function Board(props){
                 stalemateAudio.play();
             }
         }
+        return allMoves;
     }
 
     function isKingInCheck(board) {
@@ -184,12 +207,15 @@ function Board(props){
     let originSquare= null;
     function selectPiece(e){
         e.preventDefault();
+        if((colors[turn%2]==='white'&&whiteAi)||(colors[turn%2]==='black'&&blackAi)) return; // Prevent human from taking AI turn
+
         if(!originSquare) originSquare = e.target.id.split(',').map((str)=>parseInt(str));
         if(!theBoard[originSquare[0]][originSquare[1]]) originSquare = null;
     }
 
     let destinationSquare = null;
     function selectMove(e){
+        
         if(originSquare){
             destinationSquare = e.target.id.split(',').map((str)=>parseInt(str));
             handlePieceMove(theBoard[originSquare[0]][originSquare[1]], destinationSquare)
@@ -205,13 +231,23 @@ function Board(props){
         return rows;
     }
 
+    function handleWhiteChange(e){
+        setWhiteAi(b => !b);
+    }
+    function handleBlackChange(e){
+        setBlackAi(b => !b);
+    }
+
     return(
         <> 
             <Navbar />
-            <h1>Turn is {turn}.</h1>
-            <h1>It's {colors[turn%2]}'s turn.</h1>
+            {/* <h1>Turn is {turn}.</h1> */}
+            <h3>It's {colors[turn%2]}'s turn.</h3>
+            <label><input type="checkbox" onChange={handleWhiteChange}/>White AI</label>
             <button onClick={() => setIsFlipped(!isFlipped)}>Flip</button>
             <button onClick={undo}>Undo</button>
+            <label><input type="checkbox" onChange={handleBlackChange} defaultChecked={true}/>Black AI</label>
+            <button onClick={()=>console.log(theBoard)}>Print Board for Debugging</button>
             <div className='move-log-holder'>
                 <div className={`my-component ${isFlipped ? 'flip' : ''}`}>
                     {theBoard.map((theRow,rowIdx)=>{
