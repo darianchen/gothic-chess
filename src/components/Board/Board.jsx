@@ -44,6 +44,10 @@ function Board(props){
 
     let boardHistory = props.boardHistory;
 
+    const aiTurn = () => {
+        return (colors[turn%2]==='white'&&whiteAi) || (colors[turn%2]==='black'&&blackAi)
+    };
+
     function copyBoard(board, dontSave = false){
         const boardCopy = new Array(board.length).fill().map(()=> new Array(board[0].length).fill(null));
         for(let r=0;r<board.length;r++){
@@ -133,7 +137,9 @@ function Board(props){
         } else {
             // handle error
             
-            console.error('Illegal Move')
+            // console.error('Illegal Move');
+
+            if(aiTurn()) setTimeout(tryAiMove,1000);
         }
         
     }
