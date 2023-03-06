@@ -3,8 +3,8 @@ import whiteQueen from '../assets/Images/white_queen.png';
 import blackQueen from '../assets/Images/black_queen.png';
 
 class Queen extends Piece {
-    constructor(color,board,position){
-        super(color,board,position);
+    constructor(color,board,position, hasMoved){
+        super(color,board,position, hasMoved);
         if(color==='white'){
             this.image = whiteQueen;
         } else {

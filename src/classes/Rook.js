@@ -3,8 +3,8 @@ import whiteRook from '../assets/Images/white_rook.png';
 import blackRook from '../assets/Images/black_rook.png';
 
 class Rook extends Piece {
-    constructor(color,board,position){
-        super(color,board,position);
+    constructor(color,board,position, hasMoved){
+        super(color,board,position, hasMoved);
         if(color==='white'){
             this.image = whiteRook;
         } else {

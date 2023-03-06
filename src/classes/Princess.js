@@ -3,8 +3,8 @@ import whitePrincess from '../assets/Images/white_princess.png';
 import blackPrincess from '../assets/Images/black_princess.png';
 
 class Princess extends Piece {
-    constructor(color,board,position){
-        super(color,board,position);
+    constructor(color,board,position, hasMoved){
+        super(color,board,position, hasMoved);
         if(color==='white'){
             this.image = whitePrincess;
         } else {

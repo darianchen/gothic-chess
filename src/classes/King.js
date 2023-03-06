@@ -5,8 +5,8 @@ import whiteKingChecked from '../assets/Images/white_king_check.png';
 import blackKingChecked from '../assets/Images/black_king_check.png';
 
 class King extends Piece {
-    constructor(color,board,position){
-        super(color,board,position);
+    constructor(color,board,position, hasMoved){
+        super(color,board,position, hasMoved);
         if(color==='white'){
             this.image = whiteKing;
         } else {

@@ -3,8 +3,8 @@ import whiteBishop from '../assets/Images/white_bishop.png';
 import blackBishop from '../assets/Images/black_bishop.png';
 
 class Bishop extends Piece {
-    constructor(color,board,position){
-        super(color,board,position);
+    constructor(color,board,position, hasMoved){
+        super(color,board,position, hasMoved);
         if(color==='white'){
             this.image = whiteBishop;
         } else {

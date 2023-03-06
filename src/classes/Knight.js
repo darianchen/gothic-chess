@@ -3,8 +3,8 @@ import whiteKnight from '../assets/Images/white_knight.png';
 import blackKnight from '../assets/Images/black_knight.png';
 
 class Knight extends Piece {
-    constructor(color,board,position){
-        super(color,board,position);
+    constructor(color,board,position, hasMoved){
+        super(color,board,position, hasMoved);
         if(color==='white'){
             this.image = whiteKnight;
         } else {
