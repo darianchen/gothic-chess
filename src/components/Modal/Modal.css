@@ -12,6 +12,7 @@
 }
   
 .modalContainer {
+    position: relative;
     background-color: #fff;
     border-radius: 10px;
     padding: 20px;
@@ -19,6 +20,24 @@
     height: 300px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     align-items: center;
+}
+
+.modal-title {
+    font-weight: bold;
+    font-size: 24px;
+}
+ 
+.modal-body {
+    padding: 20px;
+    font-size: 16px;
+    line-height: 1.5;
+    text-align: justify;
+    color: #333;
+}
+  
+.closeBtn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
 }
