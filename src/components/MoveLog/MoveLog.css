@@ -4,7 +4,9 @@ table {
     font-size: 14px;
     width: 400px;
     border: 2px solid #007bff;
+    border-collapse: collapse;
 }
+
   
 th {
     background-color: #007bff;

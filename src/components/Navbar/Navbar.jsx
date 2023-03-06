@@ -15,7 +15,7 @@ function Navbar() {
                 <div className="navbar-buttons">
                 <button className="navbar-button" onClick={() => {setOpenAboutModal(true)}}>ABOUT</button>
                 <button className="navbar-button" onClick={() => {setOpenHowToPlayModal(true)}}>HOW TO PLAY</button>
-                <button className="navbar-button"><GitHubIcon /> REPO</button>
+                <button className="navbar-button" onClick={() => window.open("https://github.com/darianchen/gothic-chess")}><GitHubIcon /> REPO</button>
                 </div>
             </nav>
             {openAboutModal && <Modal setOpenModal={setOpenAboutModal} modalType="ABOUT" />}

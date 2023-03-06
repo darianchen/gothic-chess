@@ -153,7 +153,11 @@ function Board(props){
         }
         // console.log(allMoves);
         if(!allMoves.length){
-            window.alert(isKingInCheck(theBoard) ? 'Checkmate!' : 'Stalemate!');
+            if(isKingInCheck(theBoard)){
+                checkmateAudio.play();
+            } else{
+                stalemateAudio.play();
+            }
         }
     }
 
@@ -171,32 +175,7 @@ function Board(props){
         return board.reduce((count, row) => {
           return count + row.filter(square => square != null).length;
         }, 0);
-    }
-
-    // function isStalemate(board, kingInCheck){ // stalemate checkmate
-    //     if(!kingInCheck){
-    //         const color = colors[turn%2];
-    //         for(let rank = 0; rank < 8; rank++){
-    //             for(let file = 0; file < 10; file++){
-    //                 let piece = null;
-    //                 if(board[rank][file]) piece = board[rank][file];
-    //                 if(piece && piece.color === color){
-    //                     let availableMoves = piece.availableMoves();
-    //                     for(let i = 0; i < availableMoves.length; i++){
-    //                         const[row, col] = availableMoves[i];
-    //                         if(!piece.inCheck()) {  
-    //                             return false;
-    //                         }
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
-    //     else{
-    //         return false;
-    //     }
-    //     return true;
-    // }
+    } 
 
     // stuff for testing
     window.handlePieceMove = handlePieceMove;
@@ -218,10 +197,6 @@ function Board(props){
         originSquare = null;
     }
 
-    function flipBoard(){
-        setIsFlipped(!isFlipped);
-    }
-
     function formatMoves(moveLog){ 
         const rows = [];
         for(let i=0;i<moveLog.length;i+=2){
@@ -235,7 +210,7 @@ function Board(props){
             <Navbar />
             <h1>Turn is {turn}.</h1>
             <h1>It's {colors[turn%2]}'s turn.</h1>
-            <button onClick={flipBoard}>Flip</button>
+            <button onClick={() => setIsFlipped(!isFlipped)}>Flip</button>
             <button onClick={undo}>Undo</button>
             <div className='move-log-holder'>
                 <div className={`my-component ${isFlipped ? 'flip' : ''}`}>

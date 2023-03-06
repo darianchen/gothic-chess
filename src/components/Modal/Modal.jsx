@@ -4,10 +4,10 @@ function Modal({setOpenModal, modalType}) {
         return(
             <>
                 <div  onClick={() => {setOpenModal(false)}} className="modalBackground">
-                    <div onClick={(e) => {e.stopPropagation()}} className="modalContainer">
+                    <div onClick={(e) => {e.stopPropagation()}} className="modalContainer" id="aboutModal">
                         <button className="closeBtn" onClick={() => {setOpenModal(false)}}>&times;</button>
                         <div className="modal-title">About</div>
-                        <div className="modal-body">Welcome to Gothic Chess! A variant of the timeless game created by Ed Trice in 2000. This chess variant brings a twist on the timeless game we all know and love.
+                        <div className="modal-body">Welcome to Gothic Chess! A variant of the timeless game created by Ed Trice in 2000. This chess variant brings a twist on the game we all know and love.
                         Gothic Chess introduces a unique gameplay experience with an expansive 80-square board and the addition of two new pieces - the Chancellor, capable of moving like a Knight or Rook, and the Archbishop, capable of moving like a Knight or Bishop.
                         This web app was built using React and vanilla JavaScript. Future updates will include an online multiplayer function and the ability to play against the computer. <span style={{ fontWeight: 'bold', color: '#007FFF' }}>Stay tuned!</span>
 
@@ -20,7 +20,7 @@ function Modal({setOpenModal, modalType}) {
         return(
             <>
                 <div  onClick={() => {setOpenModal(false)}} className="modalBackground">
-                    <div onClick={(e) => {e.stopPropagation()}} className="modalContainer">
+                    <div onClick={(e) => {e.stopPropagation()}} className="modalContainer" id="how-to-play">
                         <button className="closeBtn" onClick={() => {setOpenModal(false)}}>&times;</button>
                         <div className="modal-title">How to play</div>
                         <div className="modal-body">This is how to play</div>

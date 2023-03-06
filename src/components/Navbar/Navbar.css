@@ -5,21 +5,21 @@
     padding: 20px;
     background-color: #333;
     color: white;
-  }
+}
   
-  .navbar-title {
+.navbar-title {
     font-size: 2rem;
     font-weight: bold;
     text-align: center;
-  }
+}
   
-  .navbar-buttons {
+.navbar-buttons {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-  }
+}
   
-  .navbar-button {
+.navbar-button {
     margin-left: 20px;
     padding: 10px 20px;
     border-radius: 50px;
@@ -29,13 +29,20 @@
     border: none;
     cursor: pointer;
     transition: all 0.2s ease-in-out;
-  }
+}
   
-  .navbar-button:first-child {
-    margin-left: 0;
-  }
-  
-  .navbar-button:hover {
+.navbar-button:hover {
     background-color: #333;
     color: #ffc107
 }  
+
+.navbar-button svg {
+    vertical-align: middle;
+}
+
+.github-svg {
+    fill: white;
+    background-color: #ffc107;
+    border-radius: 50%;
+    transition: all 0.2s ease-in-out;
+}
