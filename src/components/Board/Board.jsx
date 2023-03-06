@@ -31,17 +31,16 @@ function Board(props){
     const stalemateAudio = new Audio('https://raw.githubusercontent.com/darianchen/gothic-chess/main/src/assets/Audio/stalemate.mp3');
     const checkmateAudio = new Audio('https://raw.githubusercontent.com/darianchen/gothic-chess/main/src/assets/Audio/checkmate.mp3');
 
-    useEffect(() => {
-        if (isStalemate(theBoard, isKingInCheck(theBoard))){
-            window.alert('Stalemate');
-            stalemateAudio.play();
-        };
-    },[turn])
+    // useEffect(() => {
+    //     if (isStalemate(theBoard, isKingInCheck(theBoard))){
+    //         window.alert('Stalemate');
+    //         stalemateAudio.play();
+    //     };
+    // },[turn])
 
     let boardHistory = props.boardHistory;
 
-    function copyBoard(board){
-        // console.log(boardHistory, 1)
+    function copyBoard(board, dontSave = false){
         const boardCopy = new Array(board.length).fill().map(()=> new Array(board[0].length).fill(null));
         for(let r=0;r<board.length;r++){
             for(let c=0;c<board[0].length;c++){
@@ -53,8 +52,7 @@ function Board(props){
                 }
             }
         }
-        boardHistory[turn] = boardCopy;
-        // console.log(boardHistory,2)
+        if(!dontSave) boardHistory[turn] = boardCopy;
         return boardCopy;
     }
 
@@ -71,22 +69,26 @@ function Board(props){
     function undo(){
         if(turn>1){
             let copy = boardHistory[turn-1];
+            setBoardTo(copy)
 
-            for(let r=0;r<copy.length;r++){
-                for(let c=0;c<copy[0].length;c++){
-                    if(!copy[r][c]){
-                        theBoard[r][c] = null;
-                    } else {
-                        let pieceCopy = {...copy[r][c]};
-                        theBoard[r][c] = new constructors[pieceCopy.letter](pieceCopy.color,theBoard,[r,c],pieceCopy.hasMoved);
-                    }
-                }
-            }
             setTurn(turn-1);
             setNumPieces(calculateNumPieces(copy))
             moveLog.pop();
         } else {
             console.error("Can't undo any more.");
+        }
+    }
+
+    function setBoardTo(copy){
+        for(let r=0;r<copy.length;r++){
+            for(let c=0;c<copy[0].length;c++){
+                if(!copy[r][c]){
+                    theBoard[r][c] = null;
+                } else {
+                    let pieceCopy = {...copy[r][c]};
+                    theBoard[r][c] = new constructors[pieceCopy.letter](pieceCopy.color,theBoard,[r,c],pieceCopy.hasMoved);
+                }
+            }
         }
     }
 
@@ -99,6 +101,7 @@ function Board(props){
         if( piece.canMove(newPosition) && piece.color === colors[turn%2] ){
             
             copyBoard(theBoard);
+            
             const move = piece.move(newPosition);
             if(move[0]) {
 
@@ -118,13 +121,41 @@ function Board(props){
                 thisMove += rows[newPosition[0]];
                 moveLog.push(thisMove);
 
+                findAvailableMoves(colors[(turn+1)%2]);
                 setTurn(turn+1);
             }
         } else {
             // handle error
             console.error('Illegal Move')
         }
-    }      
+        
+    }    
+    
+    function findAvailableMoves(color){
+        let allMoves = [];
+        let currentBoard = copyBoard(theBoard, true);
+
+        for(let r=0;r<theBoard.length;r++){
+            for(let c=0;c<theBoard[0].length;c++){
+                if(theBoard[r][c]&&theBoard[r][c].color===color){
+                    const currentPiece = theBoard[r][c];
+
+                    for(let move of currentPiece.availableMoves()){
+                        if(!currentPiece.move([move[0],move[1]])){
+                            setBoardTo(currentBoard);
+                            continue;
+                        }
+                        if(!currentPiece.inCheck()) allMoves.push([currentPiece,move]);
+                        setBoardTo(currentBoard);
+                    }
+                }
+            }
+        }
+        console.log(allMoves);
+        if(!allMoves.length){
+            window.alert(isKingInCheck(theBoard) ? 'Checkmate!' : 'Stalemate!');
+        }
+    }
 
     function isKingInCheck(board) {
         const king = board.flat().find((piece) => piece instanceof King && piece.inCheck(piece.position[0], piece.position[1]));
@@ -142,30 +173,30 @@ function Board(props){
         }, 0);
     }
 
-    function isStalemate(board, kingInCheck){ // stalemate checkmate
-        if(!kingInCheck){
-            const color = colors[turn%2];
-            for(let rank = 0; rank < 8; rank++){
-                for(let file = 0; file < 10; file++){
-                    let piece = null;
-                    if(board[rank][file]) piece = board[rank][file];
-                    if(piece && piece.color === color){
-                        let availableMoves = piece.availableMoves();
-                        for(let i = 0; i < availableMoves.length; i++){
-                            const[row, col] = availableMoves[i];
-                            if(!piece.inCheck()) {  
-                                return false;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        else{
-            return false;
-        }
-        return true;
-    }
+    // function isStalemate(board, kingInCheck){ // stalemate checkmate
+    //     if(!kingInCheck){
+    //         const color = colors[turn%2];
+    //         for(let rank = 0; rank < 8; rank++){
+    //             for(let file = 0; file < 10; file++){
+    //                 let piece = null;
+    //                 if(board[rank][file]) piece = board[rank][file];
+    //                 if(piece && piece.color === color){
+    //                     let availableMoves = piece.availableMoves();
+    //                     for(let i = 0; i < availableMoves.length; i++){
+    //                         const[row, col] = availableMoves[i];
+    //                         if(!piece.inCheck()) {  
+    //                             return false;
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     else{
+    //         return false;
+    //     }
+    //     return true;
+    // }
 
     // stuff for testing
     window.handlePieceMove = handlePieceMove;
@@ -226,7 +257,7 @@ function Board(props){
                     })}
                 </div>
 
-                <MoveLog moveLog={formatMoves(moveLog)} turn={turn}/>
+                <MoveLog moveLog={formatMoves(moveLog)}/>
             </div>
         </>
     )

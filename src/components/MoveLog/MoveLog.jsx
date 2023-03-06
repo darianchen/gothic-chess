@@ -1,6 +1,6 @@
 function MoveLog(props) {
     let moveLog = props.moveLog;
-    let turn = props.turn;
+    // let turn = props.turn;
 
     const moves = moveLog.map((row,id)=>{
         return <tr key={id}>
