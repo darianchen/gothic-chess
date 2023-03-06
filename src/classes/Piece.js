@@ -14,11 +14,11 @@ class Piece {
     move(newPosition,board=this.board){
         let castle = false;
         // kingside
-        if(this.isKing && !this.hasMoved && newPosition[1] - this.position[1] === 3) {
+        if(this.isKing && newPosition[1] - this.position[1] === 3) {
             board[newPosition[0]][9].move([newPosition[0],7]); // change the position of the rook
             castle = true;
         // queenside
-        } else if(this.isKing && !this.hasMoved && newPosition[1] === 2) {
+        } else if(this.isKing && newPosition[1] - this.position[1] === -3) {
             board[newPosition[0]][0].move([newPosition[0],3]); // change the position of the rook
             castle = true;
         }
@@ -55,7 +55,7 @@ class Piece {
     }
 
     inCheck(targetRow,targetCol, board=this.board){
-        if(!targetRow||!targetCol){
+        if(targetRow===undefined||targetCol===undefined){
             for(let row = 0; row < 8; row++){
                 for(let col = 0; col < 10; col++){
                     if(board[row][col] && board[row][col].color === this.color && board[row][col].isKing){
@@ -66,6 +66,7 @@ class Piece {
             }
         };
 
+        // console.log(`checking ${targetRow} and ${targetCol}`)
         for(let row = 0; row < 8; row++){
             for(let col = 0; col < 10; col++){
                 const piece = board[row][col];
@@ -73,47 +74,15 @@ class Piece {
                 if (piece && piece.color !== this.color && piece.availableMoves(true).some(move => {
                     const [r, c] = move;
                     return r === targetRow && c === targetCol;
-                  })) {
+                })) {
+                    // console.log("it's in check")
                     return true;
-                  }
+                }
             }
         };
+        // console.log("it's safe")
         return false;
     }
-
-    // constructors = {
-    //     '': Pawn,
-    //     'R': Rook,
-    //     'N': Knight,
-    //     'B': Bishop,
-    //     'E': Empress,
-    //     'K': King,
-    //     'P': Princess,
-    //     'Q': Queen,
-    // }
-
-    // filterMoves(moves){
-    //     const filtered = [];
-
-    //     for(let move of moves){
-    //         const boardCopy = new Array(board.length).fill().map(()=> new Array(board[0].length).fill(null));
-    //         for(let r=0;r<board.length;r++){
-    //             for(let c=0;c<board[0].length;c++){
-    //                 if(board[r][c]){
-    //                     let pieceCopy = {...board[r][c]};
-                        
-    //                     boardCopy[r][c] = new constructors[pieceCopy.letter](pieceCopy.color,theBoard,[r,c],pieceCopy.hasMoved);
-    //                 }
-    //             }
-    //         }
-
-    //         const pieceCopy = boardCopy[this.position[0]][this.position[1]];
-    //         pieceCopy.move(move[0],move[1],boardCopy);
-    //         if(!pieceCopy.inCheck(null,null,boardCopy)) filtered.push(move);
-    //     }
-
-    //     return filtered;
-    // }
 
 }
 

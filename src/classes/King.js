@@ -42,8 +42,8 @@ class King extends Piece {
             for(let side of [-1,1]){
                 const rookCol = side === -1 ? 0 : 9
                 if(!this.hasMoved && this.board[row][rookCol] && !this.board[row][rookCol].hasMoved){
-                    let canCastle = true;
-                    for(let colChange = 0; colChange < 4; colChange++){
+                    let canCastle = !this.inCheck();
+                    for(let colChange = 1; colChange < 4; colChange++){
                         if(this.board[row][col + (colChange * side)]) canCastle = false;
                         if(this.inCheck(row,col + (colChange * side))) canCastle = false;
                     }

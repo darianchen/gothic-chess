@@ -151,7 +151,7 @@ function Board(props){
                 }
             }
         }
-        console.log(allMoves);
+        // console.log(allMoves);
         if(!allMoves.length){
             window.alert(isKingInCheck(theBoard) ? 'Checkmate!' : 'Stalemate!');
         }
