@@ -13,6 +13,7 @@ import blackKingChecked from '../../assets/Images/black_king_check.png';
 import whiteKingChecked from '../../assets/Images/white_king_check.png';
 import MoveLog from '../MoveLog/';
 import Navbar from '../Navbar';
+import GameOverModal from '../GameOverModal';
 
 function Board(props){
     let theBoard = props.board;
@@ -26,7 +27,8 @@ function Board(props){
     const [numPieces, setNumPieces] = useState(40);
     const [whiteAi, setWhiteAi] = useState(false);
     const [blackAi, setBlackAi] = useState(true);
-
+    const [openGameOverModal, setGameOverModal] = useState(false);
+    const [result, setResult] = useState('');
     const captureAudio = new Audio('https://raw.githubusercontent.com/darianchen/gothic-chess/main/src/assets/Audio/capture.mp3');
     const moveAudio = new Audio('https://raw.githubusercontent.com/darianchen/gothic-chess/main/src/assets/Audio/move.mp3');
     const castleAudio = new Audio('https://raw.githubusercontent.com/darianchen/gothic-chess/main/src/assets/Audio/castle.mp3');
@@ -133,8 +135,14 @@ function Board(props){
                 thisMove += rows[newPosition[0]];
                 moveLog.push(thisMove);
 
-                findAvailableMoves(colors[(turn+1)%2]);
-                setTurn(turn+1);
+                let result = findAvailableMoves(colors[(turn+1)%2]);
+
+                if(typeof result === 'string'){
+                    setGameOverModal(true);
+                    setResult(result);
+                } else {    
+                    setTurn(turn + 1);
+                }
             }
         } else {
             // handle error
@@ -187,8 +195,10 @@ function Board(props){
         if(!allMoves.length){
             if(isKingInCheck(theBoard)){
                 checkmateAudio.play();
+                return 'CHECKMATE';
             } else{
                 stalemateAudio.play();
+                return 'STALEMATE';
             }
         }
         return allMoves;
@@ -251,7 +261,7 @@ function Board(props){
     return(
         <> 
             <Navbar />
-            {/* <h1>Turn is {turn}.</h1> */}
+            <h1>Turn is {turn}.</h1>
             <h3>It's {colors[turn%2]}'s turn.</h3>
             <label><input type="checkbox" onChange={handleWhiteChange}/>White AI</label>
             <button onClick={() => setIsFlipped(!isFlipped)}>Flip</button>
@@ -279,6 +289,7 @@ function Board(props){
                 </div>
 
                 <MoveLog moveLog={formatMoves(moveLog)}/>
+                {openGameOverModal && <GameOverModal result={result} color={colors[(turn+1)%2]} setGameOverModal={setGameOverModal} />}
             </div>
         </>
     )

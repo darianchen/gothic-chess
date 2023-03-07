@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Modal from '../Modal';
+import NavbarModal from '../NavbarModal';
 import './Navbar.css';
 import GitHubIcon from './GitHubIcon';
 
@@ -18,8 +18,8 @@ function Navbar() {
                 <button className="navbar-button" onClick={() => window.open("https://github.com/darianchen/gothic-chess")}><GitHubIcon /> REPO</button>
                 </div>
             </nav>
-            {openAboutModal && <Modal setOpenModal={setOpenAboutModal} modalType="ABOUT" />}
-            {openHowToPlayModal && <Modal setOpenModal={setOpenHowToPlayModal} modalType="HOW TO PLAY" />}
+            {openAboutModal && <NavbarModal setOpenModal={setOpenAboutModal} modalType="ABOUT" />}
+            {openHowToPlayModal && <NavbarModal setOpenModal={setOpenHowToPlayModal} modalType="HOW TO PLAY" />}
         </>
     );
 }

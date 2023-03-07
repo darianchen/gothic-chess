@@ -1,4 +1,4 @@
-function Modal({setOpenModal, modalType}) {
+function NavbarModal({setOpenModal, modalType}) {
 
     if(modalType === 'ABOUT'){
         return(
@@ -31,4 +31,4 @@ function Modal({setOpenModal, modalType}) {
     } 
 }
 
-export default Modal;
+export default NavbarModal;
