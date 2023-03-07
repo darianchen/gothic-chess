@@ -48,7 +48,7 @@ class Pawn extends Piece {
     }
 
     // just for pawns, so they can have prevpos and promotion
-    move(newPosition, promotion = true){
+    move(newPosition, promotion = true, ai = false){
         const [oldRow, oldCol] = this.position;
         const [newRow, newCol] = newPosition;
 
@@ -57,11 +57,13 @@ class Pawn extends Piece {
             let type;
             const pieces = ['q','e','p','r','b','k'];
 
-            if(promotion){
+            if(promotion && !ai){
                 while(!pieces.includes(type)){
                     type = prompt('Select a new piece: Queen, Empress, Princess, Rook, Bishop, or Knight', 'Queen')[0].toLowerCase();
                 } 
-            }        
+            }  else if(promotion && ai){
+                type = pieces[Math.floor(Math.random()*pieces.length)];
+            }      
 
             switch(type){   
                 case 'q': new Queen(this.color,this.board,[newRow,newCol]); break;

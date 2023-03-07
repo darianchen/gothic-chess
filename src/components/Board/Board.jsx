@@ -116,7 +116,7 @@ function Board(props){
             
             copyBoard(theBoard);
             
-            const move = piece.move(newPosition);
+            const move = piece.move(newPosition,true,aiTurn());
             if(move[0]) {
 
                 const numberOfPiecesOnBoard = calculateNumPieces(theBoard);
@@ -180,7 +180,7 @@ function Board(props){
                     for(let move of currentPiece.availableMoves()){
 
                         let prevHasMoved = currentPiece.hasMoved;
-                        if ((currentPiece.move([move[0], move[1]]) && !currentPiece.inCheck())) {
+                        if ((currentPiece.move([move[0], move[1]], false) && !currentPiece.inCheck())) {
                             currentPiece.hasMoved = prevHasMoved;
                             allMoves.push([currentPiece, move]);
                         }
