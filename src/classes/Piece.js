@@ -11,7 +11,8 @@ class Piece {
         return r<0||c<0||r>7||c>9;
     }
 
-    move(newPosition,board=this.board){
+    move(newPosition){
+        let board = this.board;
         if(this.outOfBounds(...newPosition)) return [false]
 
         let castle = false;

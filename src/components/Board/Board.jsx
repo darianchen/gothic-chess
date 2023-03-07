@@ -147,9 +147,9 @@ function Board(props){
         } else {
             // handle error
             
-            // console.error('Illegal Move');
+            console.error('Illegal Move');
 
-            if(aiTurn()) setTimeout(tryAiMove,1000);
+           if(aiTurn()) setTimeout(tryAiMove,1000);
         }
         
     }
@@ -162,7 +162,7 @@ function Board(props){
         if(!allMoves.length) return; // this should go to stalemate/checkmate
 
         const [randomPiece,randomMove] = allMoves[Math.floor(Math.random()*allMoves.length)];
-        console.log("trying to make move:",randomPiece,randomMove)
+        // console.log("trying to make move:",randomPiece,randomMove)
         
         handlePieceMove(randomPiece,randomMove);
     }
@@ -179,10 +179,12 @@ function Board(props){
 
                     for(let move of currentPiece.availableMoves()){
 
-                        if ((!(currentPiece instanceof Pawn) && currentPiece.move([move[0], move[1]]) && !currentPiece.inCheck()) || (currentPiece instanceof Pawn && currentPiece.move([move[0], move[1]], false) && !currentPiece.inCheck())) {
+                        let prevHasMoved = currentPiece.hasMoved;
+                        if ((currentPiece.move([move[0], move[1]]) && !currentPiece.inCheck())) {
+                            currentPiece.hasMoved = prevHasMoved;
                             allMoves.push([currentPiece, move]);
                         }
-                                                        
+                                  
                         // reset for next test;
                         setBoardTo(currentBoard);
                         currentPiece.position = oldPos;
@@ -267,7 +269,7 @@ function Board(props){
             <button onClick={() => setIsFlipped(!isFlipped)}>Flip</button>
             <button onClick={undo}>Undo</button>
             <label><input type="checkbox" onChange={handleBlackChange} defaultChecked={true}/>Black AI</label>
-            <button onClick={()=>console.log(theBoard)}>Print Board for Debugging</button>
+            {/* <button onClick={()=>console.log(theBoard)}>Print Board for Debugging</button> */}
             <div className='move-log-holder'>
                 <div className={`my-component ${isFlipped ? 'flip' : ''}`}>
                     {theBoard.map((theRow,rowIdx)=>{
