@@ -101,14 +101,16 @@ function Board(props){
     }
 
     function handlePieceMove(piece, newPosition){
-        // console.log(turn,piece,newPosition)
-
+        let oldRow;
+        let oldCol;
         let thisMove = ''
-        let oldRow = piece.position[0];
-        let oldCol = piece.position[1];
-        thisMove += piece.letter;
+        if(piece){
+            oldRow = piece.position[0];
+            oldCol = piece.position[1];
+            thisMove += piece.letter;
+        }
         
-        if( piece.canMove(newPosition) && piece.color === colors[turn%2] ){
+        if(piece && piece.canMove(newPosition) && piece.color === colors[turn%2] ){
             
             copyBoard(theBoard);
             
@@ -169,8 +171,10 @@ function Board(props){
 
                     for(let move of currentPiece.availableMoves()){
 
-                        if(currentPiece.move([move[0],move[1]]) && !currentPiece.inCheck()) allMoves.push([currentPiece,move]);
-                        
+                        if ((!(currentPiece instanceof Pawn) && currentPiece.move([move[0], move[1]]) && !currentPiece.inCheck()) || (currentPiece instanceof Pawn && currentPiece.move([move[0], move[1]], false) && !currentPiece.inCheck())) {
+                            allMoves.push([currentPiece, move]);
+                        }
+                                                        
                         // reset for next test;
                         setBoardTo(currentBoard);
                         currentPiece.position = oldPos;
