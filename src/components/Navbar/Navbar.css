@@ -6,6 +6,7 @@
     background-color: #333;
     color: white;
     box-sizing: border-box;
+    width: 100%;
 }
   
 .navbar-title {

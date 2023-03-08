@@ -28,8 +28,8 @@ function NavbarModal({setOpenModal, modalType}) {
                         Gothic Chess adds two new pieces to the game: the Princess and the Empress. The Empress moves like a Bishop and a Knight combined, and the Chancellor moves like a Rook and a Knight combined.
                         </p>
                         <div id="new-piece-container">
-                            <img src="src/assets/Images/princesses.png" alt="Princess"/>
-                            <img src="src/assets/Images/empresses.png" alt="Empress"/>
+                            <img src="./gothic-chess/src/assets/Images/princesses.png" alt="Princess"/>
+                            <img src="./gothic-chess/src/assets/Images/empresses.png" alt="Empress"/>
                         </div>
                         <p>The game also has a different castling rule. In Gothic Chess, the King moves three squares in either direction, and the Rook moves to the square adjacent to the King.</p>
                       </div>
