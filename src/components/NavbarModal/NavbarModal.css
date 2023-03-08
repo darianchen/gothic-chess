@@ -28,7 +28,7 @@
 
 #how-to-play{
     width: 600px;
-    height: 500px;
+    height: 360px;
 }
 
 .modal-title {
@@ -48,4 +48,23 @@
     position: absolute;
     top: 10px;
     right: 10px;
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 50%;
+    border: none;
+    color: #333;
+    background-color: #fff;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+  
+.closeBtn:hover {
+    background-color: #f2f2f2;
+}  
+
+#new-piece-container {
+  display: flex;
+  justify-content: center;
 }

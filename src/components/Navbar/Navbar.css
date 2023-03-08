@@ -5,6 +5,7 @@
     padding: 20px;
     background-color: #333;
     color: white;
+    box-sizing: border-box;
 }
   
 .navbar-title {
@@ -20,6 +21,7 @@
 }
   
 .navbar-button {
+    font-size: 1em;
     margin-left: 20px;
     padding: 10px 20px;
     border-radius: 50px;
@@ -38,6 +40,11 @@
 
 .navbar-button svg {
     vertical-align: middle;
+}
+
+.navbar-button:focus,
+.navbar-button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
 }
 
 .github-svg {
