@@ -1,5 +1,5 @@
-import Princesses from "../../assets/Images/Princesses.png";
-import Empresses from "../../assets/Images/Empresses.png";
+import Princesses from "../../assets/Images/princesses.png";
+import Empresses from "../../assets/Images/empresses.png";
 
 function NavbarModal({setOpenModal, modalType}) {
     switch (modalType) {
