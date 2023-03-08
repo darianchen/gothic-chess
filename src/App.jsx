@@ -8,6 +8,7 @@ import Empress from './classes/Empress';
 import Queen from './classes/Queen';
 import King from './classes/King';
 import Pawn from './classes/Pawn';
+import Navbar from './components/Navbar';
 
 function App() {
   let board = new Array(8).fill().map(()=> new Array(10).fill(null));
@@ -69,6 +70,7 @@ function App() {
 
   return (
     <div className="App">
+      <Navbar />
       <Board board={board} moveLog={moveLog} boardHistory={boardHistory}/>
     </div>
   )

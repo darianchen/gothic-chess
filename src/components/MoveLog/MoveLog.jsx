@@ -10,18 +10,18 @@ function MoveLog(props) {
         </tr>
     });
 
-    return(<>
-        {/* <h1>Turn {turn} of {moveLog.length}</h1> */}
-        <table>
-            <thead>
-                <tr><th>Move</th><th>White</th><th>Black</th></tr>
-            </thead>
-            <tbody>
-                {moves}
-            </tbody>
-        </table>
-    </>)
-
+    return(
+        <div id="table-container">
+            <table>
+                <thead>
+                    <tr><th>Move</th><th>White</th><th>Black</th></tr>
+                </thead>
+                <tbody>
+                    {moves}
+                </tbody>
+            </table>
+        </div>
+    )
 }
 
 export default MoveLog;

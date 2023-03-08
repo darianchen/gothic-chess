@@ -1,18 +1,20 @@
 :root {
-    --dimension: 100px;
+    --dimension: 95px;
     --light-color: beige;
     --dark-color: darkgray;
 }
 
+#board{
+    user-select: none;
+}
+
 .row {
-    /* border: 1px solid blue; */
     height: var(--dimension);
     width: var(10*--dimension);
     display: flex;
 }
 
 .white, .black {
-    /* border: 1px solid red; */
     height: var(--dimension);
     width: var(--dimension);
     display: flex;
@@ -42,9 +44,9 @@ img{
     transform: rotate(180deg);
 }
 
-.move-log-holder {
+#game-container {
     display: flex;
-    align-items: start;
+    justify-content: center;
 }
 
 .tile{
@@ -73,4 +75,36 @@ img{
 
 .dark-sq-notation-color{ 
     color: var(--dark-color);
+}
+
+#controls-and-movelog{
+    overflow-x: hidden;
+    margin-left: 15px;
+}
+
+#board-controls {
+    display: flex;
+    height: 50px;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+  
+#board-controls label {
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    font-weight: bold;
+    margin-right: 20px;
+}
+
+#board-controls button {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #ff3b3f;
+    color: #fff;
+    font-size: 18px;
+    font-weight: bold;
 }

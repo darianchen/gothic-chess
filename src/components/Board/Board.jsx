@@ -12,7 +12,6 @@ import Bishop from '../../classes/Bishop';
 import blackKingChecked from '../../assets/Images/black_king_check.png';
 import whiteKingChecked from '../../assets/Images/white_king_check.png';
 import MoveLog from '../MoveLog/';
-import Navbar from '../Navbar';
 import GameOverModal from '../GameOverModal';
 
 function Board(props){
@@ -262,16 +261,10 @@ function Board(props){
 
     return(
         <> 
-            <Navbar />
-            <h1>Turn is {turn}.</h1>
-            <h3>It's {colors[turn%2]}'s turn.</h3>
-            <label><input type="checkbox" onChange={handleWhiteChange}/>White AI</label>
-            <button onClick={() => setIsFlipped(!isFlipped)}>Flip</button>
-            <button onClick={undo}>Undo</button>
-            <label><input type="checkbox" onChange={handleBlackChange} defaultChecked={true}/>Black AI</label>
+            <h1>Turn {turn}, {colors[turn%2]} to move</h1>
             {/* <button onClick={()=>console.log(theBoard)}>Print Board for Debugging</button> */}
-            <div className='move-log-holder'>
-                <div className={`my-component ${isFlipped ? 'flip' : ''}`}>
+            <div id='game-container'>
+                <div className={`${isFlipped ? 'flip' : ''}`} id='board'>
                     {theBoard.map((theRow,rowIdx)=>{
                         return <div className="row" key={rowIdx}>
                             {theRow.map( (theCol,colIdx)=>{
@@ -280,6 +273,12 @@ function Board(props){
                                             id={[rowIdx,colIdx]} key={colIdx}
                                             onMouseDown={selectPiece}
                                             onMouseUp={selectMove}
+                                            style={{
+                                                borderTopLeftRadius: rowIdx === 0 && colIdx === 0 ? '5%' : 0,
+                                                borderTopRightRadius: rowIdx === 0 && colIdx === 9 ? '5%' : 0,
+                                                borderBottomLeftRadius: rowIdx === 7 && colIdx === 0 ? '5%' : 0,
+                                                borderBottomRightRadius: rowIdx === 7 && colIdx === 9 ? '5%' : 0,
+                                              }}
                                         >
                                     {theBoard[rowIdx][colIdx] ? <img src={theBoard[rowIdx][colIdx].image}></img> : ''}
                                     {colIdx ===  (isFlipped ? 0 : 9) ? <div className={`notation number ${(isFlipped ? (rowIdx % 2 === 1) : (rowIdx % 2 === 0)) ? 'light-sq-notation-color' : 'dark-sq-notation-color'}`}>{rows[rowIdx]}</div> : ''}
@@ -289,8 +288,15 @@ function Board(props){
                         </div>
                     })}
                 </div>
-
-                <MoveLog moveLog={formatMoves(moveLog)}/>
+                <div id='controls-and-movelog'>
+                    <div id='board-controls' >
+                        <label><input type="checkbox" onChange={handleWhiteChange}/>White AI</label>
+                        <label><input type="checkbox" onChange={handleBlackChange} defaultChecked={true}/>Black AI</label>
+                        <button onClick={() => setIsFlipped(!isFlipped)}>Flip</button>
+                        <button onClick={undo}>Undo</button>
+                    </div>
+                    <MoveLog moveLog={formatMoves(moveLog)} />
+                </div>
                 {openGameOverModal && <GameOverModal result={result} color={colors[(turn+1)%2]} setGameOverModal={setGameOverModal} />}
             </div>
         </>
