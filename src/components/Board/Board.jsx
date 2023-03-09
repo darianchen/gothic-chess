@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import King from '../../classes/King'; 
 import Rook from '../../classes/Rook';
@@ -34,6 +34,7 @@ function Board(props){
     const checkAudio = new Audio('https://raw.githubusercontent.com/darianchen/gothic-chess/main/src/assets/Audio/check.mp3');
     const stalemateAudio = new Audio('https://raw.githubusercontent.com/darianchen/gothic-chess/main/src/assets/Audio/stalemate.mp3');
     const checkmateAudio = new Audio('https://raw.githubusercontent.com/darianchen/gothic-chess/main/src/assets/Audio/checkmate.mp3');
+    const tileRefs = useRef(Array.from({ length: theBoard.length }, () => []));
 
     useEffect(() => {
         // if (isStalemate(theBoard, isKingInCheck(theBoard))){
@@ -117,7 +118,7 @@ function Board(props){
         }
         
         if(piece && piece.canMove(newPosition) && piece.color === colors[turn%2] ){
-            
+            highlightMove(piece,newPosition);
             copyBoard(theBoard);
             
             const move = piece.move(newPosition,true,aiTurn());
@@ -255,6 +256,20 @@ function Board(props){
         return rows;
     }
 
+    function highlightMove(piece,newPosition){
+        tileRefs.current.forEach(row => {
+            row.forEach(tileRef => {
+              tileRef.style.backgroundColor = ''; // use this solution for now until I can think of a better one
+            })
+        })
+
+        const [oldRow, oldCol] = piece.position;
+        const [newRow, newCol] = newPosition;
+
+        tileRefs.current[oldRow][oldCol].style.backgroundColor = '#8BBF76';
+        tileRefs.current[newRow][newCol].style.backgroundColor = '#769656';
+    }
+
     return(
         <> 
             <h1>Turn {turn}, {colors[turn%2]} to move</h1>
@@ -270,6 +285,7 @@ function Board(props){
                                             onMouseDown={selectPiece}
                                             onMouseUp={selectMove}
                                             onClick={selectPiece}
+                                            ref={(el) => (tileRefs.current[rowIdx][colIdx] = el)}
                                         >
                                     {theBoard[rowIdx][colIdx] && <img src={theBoard[rowIdx][colIdx].image}/>}
                                     {colIdx ===  (isFlipped ? 0 : 9) ? <div className={`notation number ${(isFlipped ? (rowIdx % 2 === 1) : (rowIdx % 2 === 0)) ? 'light-sq-notation-color' : 'dark-sq-notation-color'}`}>{rows[rowIdx]}</div> : ''}
