@@ -150,7 +150,6 @@ function Board(props){
             }
         } else {
             // handle error
-            
             console.error('Illegal Move');
 
            if(aiTurn()) setTimeout(tryAiMove,1000);
@@ -241,13 +240,18 @@ function Board(props){
 
     let destinationSquare = null;
     function selectMove(e){
-        
         if(originSquare){
             destinationSquare = e.target.id.split(',').map((str)=>parseInt(str));
-            handlePieceMove(theBoard[originSquare[0]][originSquare[1]], destinationSquare)
+            if(JSON.stringify(originSquare) !== JSON.stringify(destinationSquare)) handlePieceMove(theBoard[originSquare[0]][originSquare[1]], destinationSquare)
         }
         originSquare = null;
     }
+
+    function clickPiece(e){
+        if((colors[turn%2]==='white'&&whiteAi)||(colors[turn%2]==='black'&&blackAi)) return; // Prevent human from taking AI turn
+        if(!originSquare) originSquare = e.target.id.split(',').map((str)=>parseInt(str));
+    }
+
 
     function formatMoves(moveLog){ 
         const rows = [];
@@ -278,6 +282,7 @@ function Board(props){
                                             id={[rowIdx,colIdx]} key={colIdx}
                                             onMouseDown={selectPiece}
                                             onMouseUp={selectMove}
+                                            onClick={clickPiece}
                                             style={{
                                                 borderTopLeftRadius: rowIdx === 0 && colIdx === 0 ? '5%' : 0,
                                                 borderTopRightRadius: rowIdx === 0 && colIdx === 9 ? '5%' : 0,
