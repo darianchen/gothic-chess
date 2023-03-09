@@ -10,14 +10,14 @@ import Knight from "./Knight";
 
 
 class Pawn extends Piece {
-    constructor(color,board,position, hasMoved){
+    constructor(color,board,position, hasMoved, prevPos){
         super(color,board,position, hasMoved);
         if(color==='white'){
             this.image = whitePawn;
         } else {
             this.image = blackPawn;
         }
-        this.prevPos = position;
+        this.prevPos = prevPos;
         this.letter = '';
     }
 

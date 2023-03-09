@@ -94,8 +94,13 @@ function Board(props){
                 if(!copy[r][c]){
                     theBoard[r][c] = null;
                 } else {
-                    let pieceCopy = {...copy[r][c]};
-                    theBoard[r][c] = new constructors[pieceCopy.letter](pieceCopy.color,theBoard,[r,c],pieceCopy.hasMoved);
+                    const pieceCopy = {...copy[r][c]};
+                    const { letter, color, hasMoved, prevPos } = pieceCopy;
+                    if (letter === '') {
+                      theBoard[r][c] = new constructors[letter](color, theBoard, [r, c], hasMoved, prevPos);
+                    } else {
+                      theBoard[r][c] = new constructors[letter](color, theBoard, [r, c], hasMoved);
+                    }                    
                 }
             }
         }
