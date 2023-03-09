@@ -247,25 +247,12 @@ function Board(props){
         originSquare = null;
     }
 
-    function clickPiece(e){
-        if((colors[turn%2]==='white'&&whiteAi)||(colors[turn%2]==='black'&&blackAi)) return; // Prevent human from taking AI turn
-        if(!originSquare) originSquare = e.target.id.split(',').map((str)=>parseInt(str));
-    }
-
-
     function formatMoves(moveLog){ 
         const rows = [];
         for(let i=0;i<moveLog.length;i+=2){
             rows.push([1+(i/2),moveLog[i],moveLog[i+1]])
         }
         return rows;
-    }
-
-    function handleWhiteChange(e){
-        setWhiteAi(b => !b);
-    }
-    function handleBlackChange(e){
-        setBlackAi(b => !b);
     }
 
     return(
@@ -282,15 +269,9 @@ function Board(props){
                                             id={[rowIdx,colIdx]} key={colIdx}
                                             onMouseDown={selectPiece}
                                             onMouseUp={selectMove}
-                                            onClick={clickPiece}
-                                            style={{
-                                                borderTopLeftRadius: rowIdx === 0 && colIdx === 0 ? '5%' : 0,
-                                                borderTopRightRadius: rowIdx === 0 && colIdx === 9 ? '5%' : 0,
-                                                borderBottomLeftRadius: rowIdx === 7 && colIdx === 0 ? '5%' : 0,
-                                                borderBottomRightRadius: rowIdx === 7 && colIdx === 9 ? '5%' : 0,
-                                              }}
+                                            onClick={selectPiece}
                                         >
-                                    {theBoard[rowIdx][colIdx] ? <img src={theBoard[rowIdx][colIdx].image}></img> : ''}
+                                    {theBoard[rowIdx][colIdx] && <img src={theBoard[rowIdx][colIdx].image}/>}
                                     {colIdx ===  (isFlipped ? 0 : 9) ? <div className={`notation number ${(isFlipped ? (rowIdx % 2 === 1) : (rowIdx % 2 === 0)) ? 'light-sq-notation-color' : 'dark-sq-notation-color'}`}>{rows[rowIdx]}</div> : ''}
                                     {rowIdx ===  (isFlipped ? 0 : 7) ? <div className={`notation letter ${(isFlipped ? (colIdx % 2 === 1) : (colIdx % 2 === 0)) ? 'light-sq-notation-color' : 'dark-sq-notation-color'}`}>{cols[colIdx]}</div> : ''}
                                 </div>
@@ -300,8 +281,8 @@ function Board(props){
                 </div>
                 <div id='controls-and-movelog'>
                     <div id='board-controls' >
-                        <label><input type="checkbox" onChange={handleWhiteChange}/>White AI</label>
-                        <label><input type="checkbox" onChange={handleBlackChange} defaultChecked={true}/>Black AI</label>
+                        <label><input type="checkbox" onChange={() => setWhiteAi(b => !b)}/>White AI</label>
+                        <label><input type="checkbox" onChange={() => setBlackAi(b => !b)} defaultChecked={true}/>Black AI</label>
                         <button onClick={() => setIsFlipped(!isFlipped)}>Flip</button>
                         <button onClick={undo}>Undo</button>
                     </div>
