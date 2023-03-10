@@ -1,8 +1,6 @@
 import Piece from "./Piece";
 import whiteKing from '../assets/Images/white_king.svg';
 import blackKing from '../assets/Images/black_king.svg';
-import whiteKingChecked from '../assets/Images/white_king_check.svg';
-import blackKingChecked from '../assets/Images/black_king_check.svg';
 
 class King extends Piece {
     constructor(color,board,position, hasMoved){
