@@ -68,11 +68,12 @@ function App() {
   startGame();
 
   let boardHistory = ['This is the Board History'];
+  let movePositions = ['This is move positions history'];
 
   return (
     <div className="App">
       <Navbar />
-      <Board board={board} moveLog={moveLog} boardHistory={boardHistory}/>
+      <Board board={board} moveLog={moveLog} boardHistory={boardHistory} movePositions={movePositions}/>
       <Footer />
     </div>
   )

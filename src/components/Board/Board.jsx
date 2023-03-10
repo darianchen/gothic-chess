@@ -26,8 +26,6 @@ function Board(props){
     const [blackAi, setBlackAi] = useState(true);
     const [openGameOverModal, setGameOverModal] = useState(false);
     const [result, setResult] = useState('');
-    const [prevOriginPos, setPreOriginPos] = useState(null);
-    const [prevDestinationPos, setPreDestionationPos] = useState(null);
     const captureAudio = new Audio('https://raw.githubusercontent.com/darianchen/gothic-chess/main/src/assets/Audio/capture.mp3');
     const moveAudio = new Audio('https://raw.githubusercontent.com/darianchen/gothic-chess/main/src/assets/Audio/move.mp3');
     const castleAudio = new Audio('https://raw.githubusercontent.com/darianchen/gothic-chess/main/src/assets/Audio/castle.mp3');
@@ -45,6 +43,7 @@ function Board(props){
     },[turn])
 
     let boardHistory = props.boardHistory;
+    let movePositions = props.movePositions;
 
     const aiTurn = () => {
         return (colors[turn%2]==='white'&&whiteAi) || (colors[turn%2]==='black'&&blackAi)
@@ -82,7 +81,9 @@ function Board(props){
             setBoardTo(copy)
 
             setTurn(turn-1);
-            setNumPieces(calculateNumPieces(copy))
+            setNumPieces(calculateNumPieces(copy));
+            highlightMove(movePositions[movePositions.length - 2][0], movePositions[movePositions.length - 2][1], true);
+            movePositions.pop();
             moveLog.pop();
         } else {
             console.error("Can't undo any more.");
@@ -118,12 +119,9 @@ function Board(props){
         }
         
         if(piece && piece.canMove(newPosition) && piece.color === colors[turn%2] ){
-            setPreOriginPos(piece.position);
-            setPreDestionationPos(newPosition);
-
-            highlightMove(piece,newPosition);
+            movePositions.push([piece.position,newPosition]);
             copyBoard(theBoard);
-            
+            highlightMove(piece.position,newPosition);
             const move = piece.move(newPosition,true,aiTurn());
             if(move[0]) {
 
@@ -257,19 +255,22 @@ function Board(props){
         return rows;
     }
 
-    function highlightMove(piece,newPosition){
-        const [oldRow, oldCol] = piece.position;
+    function highlightMove(oldPositions,newPosition, undo = false){
+        const [oldRow, oldCol] = oldPositions;
         const [newRow, newCol] = newPosition;
         const light = '#ADD8E6';
         const dark = '#99c2ff';
 
-        if(turn > 1){
-            tileRefs.current[prevOriginPos[0]][prevOriginPos[1]].style.backgroundColor = '';
-            tileRefs.current[prevDestinationPos[0]][prevDestinationPos[1]].style.backgroundColor = '';
+        if(turn > 1){ // removes the highlight from the previous move or current if undo
+            const deleteIdx = undo === false ? 2 : 1;
+            tileRefs.current[movePositions[movePositions.length - deleteIdx][0][0]][movePositions[movePositions.length - deleteIdx][0][1]].style.backgroundColor = '';
+            tileRefs.current[movePositions[movePositions.length - deleteIdx][1][0]][movePositions[movePositions.length - deleteIdx][1][1]].style.backgroundColor = '';
         }
 
-        tileRefs.current[oldRow][oldCol].style.backgroundColor = (oldRow + oldCol) % 2 === 0 ? light : dark;
-        tileRefs.current[newRow][newCol].style.backgroundColor = (newRow + newCol) % 2 === 0 ? light : dark;
+        if(movePositions.length > 2){
+            tileRefs.current[oldRow][oldCol].style.backgroundColor = (oldRow + oldCol) % 2 === 0 ? light : dark;
+            tileRefs.current[newRow][newCol].style.backgroundColor = (newRow + newCol) % 2 === 0 ? light : dark;
+        }   
     }
 
     return(
