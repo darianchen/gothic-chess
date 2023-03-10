@@ -1,8 +1,8 @@
 import Piece from "./Piece";
-import whiteKing from '../assets/Images/white_king.png';
-import blackKing from '../assets/Images/black_king.png';
-import whiteKingChecked from '../assets/Images/white_king_check.png';
-import blackKingChecked from '../assets/Images/black_king_check.png';
+import whiteKing from '../assets/Images/white_king.svg';
+import blackKing from '../assets/Images/black_king.svg';
+import whiteKingChecked from '../assets/Images/white_king_check.svg';
+import blackKingChecked from '../assets/Images/black_king_check.svg';
 
 class King extends Piece {
     constructor(color,board,position, hasMoved){
@@ -17,9 +17,6 @@ class King extends Piece {
     }
 
     availableMoves(skipCastle = false) {
-        this.image = (this.color === 'white' && this.image === whiteKingChecked) ? whiteKing :
-        (this.color === 'black' && this.image === blackKingChecked) ? blackKing :this.image;
-
         const [row, col] = this.position;
         const moves = [];
 

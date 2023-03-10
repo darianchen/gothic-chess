@@ -1,6 +1,6 @@
 import Piece from "./Piece";
-import whiteKnight from '../assets/Images/white_knight.png';
-import blackKnight from '../assets/Images/black_knight.png';
+import whiteKnight from '../assets/Images/white_knight.svg';
+import blackKnight from '../assets/Images/black_knight.svg';
 
 class Knight extends Piece {
     constructor(color,board,position, hasMoved){

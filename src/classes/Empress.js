@@ -1,6 +1,6 @@
 import Piece from "./Piece";
-import whiteEmpress from '../assets/Images/white_empress.png';
-import blackEmpress from '../assets/Images/black_empress.png';
+import whiteEmpress from '../assets/Images/white_empress.svg';
+import blackEmpress from '../assets/Images/black_empress.svg';
 
 class Empress extends Piece {
     constructor(color,board,position, hasMoved){

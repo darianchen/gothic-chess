@@ -28,10 +28,6 @@
     background-color: var(--dark-color);
 }
 
-.white:hover, .black:hover {
-    background-color: red;
-}
-
 img{
     pointer-events: none;
 }
@@ -107,4 +103,10 @@ img{
     color: #fff;
     font-size: 18px;
     font-weight: bold;
+}
+
+.check {
+    width: var(--dimension);
+    height: var(--dimension);
+    background-color: red;
 }

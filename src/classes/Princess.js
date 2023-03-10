@@ -1,6 +1,6 @@
 import Piece from "./Piece";
-import whitePrincess from '../assets/Images/white_princess.png';
-import blackPrincess from '../assets/Images/black_princess.png';
+import whitePrincess from '../assets/Images/white_princess.svg';
+import blackPrincess from '../assets/Images/black_princess.svg';
 
 class Princess extends Piece {
     constructor(color,board,position, hasMoved){

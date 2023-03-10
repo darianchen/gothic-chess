@@ -1,6 +1,6 @@
 import Piece from "./Piece";
-import whiteRook from '../assets/Images/white_rook.png';
-import blackRook from '../assets/Images/black_rook.png';
+import whiteRook from '../assets/Images/white_rook.svg';
+import blackRook from '../assets/Images/black_rook.svg';
 
 class Rook extends Piece {
     constructor(color,board,position, hasMoved){

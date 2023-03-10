@@ -1,6 +1,6 @@
 import Piece from "./Piece";
-import whiteBishop from '../assets/Images/white_bishop.png';
-import blackBishop from '../assets/Images/black_bishop.png';
+import whiteBishop from '../assets/Images/white_bishop.svg';
+import blackBishop from '../assets/Images/black_bishop.svg';
 
 class Bishop extends Piece {
     constructor(color,board,position, hasMoved){

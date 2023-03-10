@@ -9,8 +9,6 @@ import Pawn from '../../classes/Pawn';
 import Knight from '../../classes/Knight';
 import Bishop from '../../classes/Bishop';
 
-import blackKingChecked from '../../assets/Images/black_king_check.png';
-import whiteKingChecked from '../../assets/Images/white_king_check.png';
 import MoveLog from '../MoveLog/';
 import GameOverModal from '../GameOverModal';
 
@@ -28,6 +26,8 @@ function Board(props){
     const [blackAi, setBlackAi] = useState(true);
     const [openGameOverModal, setGameOverModal] = useState(false);
     const [result, setResult] = useState('');
+    const [prevOriginPos, setPreOriginPos] = useState(null);
+    const [prevDestinationPos, setPreDestionationPos] = useState(null);
     const captureAudio = new Audio('https://raw.githubusercontent.com/darianchen/gothic-chess/main/src/assets/Audio/capture.mp3');
     const moveAudio = new Audio('https://raw.githubusercontent.com/darianchen/gothic-chess/main/src/assets/Audio/move.mp3');
     const castleAudio = new Audio('https://raw.githubusercontent.com/darianchen/gothic-chess/main/src/assets/Audio/castle.mp3');
@@ -118,6 +118,9 @@ function Board(props){
         }
         
         if(piece && piece.canMove(newPosition) && piece.color === colors[turn%2] ){
+            setPreOriginPos(piece.position);
+            setPreDestionationPos(newPosition);
+
             highlightMove(piece,newPosition);
             copyBoard(theBoard);
             
@@ -127,7 +130,6 @@ function Board(props){
                 const numberOfPiecesOnBoard = calculateNumPieces(theBoard);
                 setNumPieces(numberOfPiecesOnBoard);     
                 const kingInCheck = isKingInCheck(theBoard);
-                
                 if (numberOfPiecesOnBoard !== numPieces) {
                   kingInCheck ? checkAudio.play() : captureAudio.play();
                   thisMove += !piece.letter ? cols[oldCol] : '';
@@ -213,8 +215,7 @@ function Board(props){
     function isKingInCheck(board) {
         const king = board.flat().find((piece) => piece instanceof King && piece.inCheck(piece.position[0], piece.position[1]));
         if (king) {
-            king.image = (king.color === 'white') ? whiteKingChecked :
-            (king.color === 'black') ? blackKingChecked : king.image;
+            tileRefs.current[king.position[0]][king.position[1]].classList.add('check');
             return true;
         }
         return false;          
@@ -257,17 +258,18 @@ function Board(props){
     }
 
     function highlightMove(piece,newPosition){
-        tileRefs.current.forEach(row => {
-            row.forEach(tileRef => {
-              tileRef.style.backgroundColor = ''; // use this solution for now until I can think of a better one
-            })
-        })
-
         const [oldRow, oldCol] = piece.position;
         const [newRow, newCol] = newPosition;
+        const light = '#ADD8E6';
+        const dark = '#99c2ff';
 
-        tileRefs.current[oldRow][oldCol].style.backgroundColor = '#8BBF76';
-        tileRefs.current[newRow][newCol].style.backgroundColor = '#769656';
+        if(turn > 1){
+            tileRefs.current[prevOriginPos[0]][prevOriginPos[1]].style.backgroundColor = '';
+            tileRefs.current[prevDestinationPos[0]][prevDestinationPos[1]].style.backgroundColor = '';
+        }
+
+        tileRefs.current[oldRow][oldCol].style.backgroundColor = (oldRow + oldCol) % 2 === 0 ? light : dark;
+        tileRefs.current[newRow][newCol].style.backgroundColor = (newRow + newCol) % 2 === 0 ? light : dark;
     }
 
     return(
