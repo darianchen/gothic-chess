@@ -33,6 +33,19 @@ function Board(props){
     const stalemateAudio = new Audio('https://raw.githubusercontent.com/darianchen/gothic-chess/main/src/assets/Audio/stalemate.mp3');
     const checkmateAudio = new Audio('https://raw.githubusercontent.com/darianchen/gothic-chess/main/src/assets/Audio/checkmate.mp3');
     const tileRefs = useRef(Array.from({ length: theBoard.length }, () => []));
+    const [dragging, setDragging] = useState(false);
+    const [position, setPosition] = useState({ x: 0, y: 0 });
+    const [selectedPiece, setSelectedPiece] = useState(null); 
+
+    useEffect(() => {
+        document.addEventListener("mousemove", handleMouseMove);
+        document.addEventListener("mouseup", selectMove);
+        return () => {
+          document.removeEventListener("mousemove", handleMouseMove);
+          document.removeEventListener("mouseup", selectMove);
+        };
+      });
+
 
     useEffect(() => {
         // if (isStalemate(theBoard, isKingInCheck(theBoard))){
@@ -229,23 +242,86 @@ function Board(props){
     window.handlePieceMove = handlePieceMove;
     window.board = theBoard;
 
-    let originSquare= null;
+    //let originSquare= null;
+    const originSquareRef = useRef(null);
+    let originalPosition = null;
+
     function selectPiece(e){
         e.preventDefault();
-        if((colors[turn%2]==='white'&&whiteAi)||(colors[turn%2]==='black'&&blackAi)) return; // Prevent human from taking AI turn
 
-        if(!originSquare) originSquare = e.target.id.split(',').map((str)=>parseInt(str));
-        if(!theBoard[originSquare[0]][originSquare[1]]) originSquare = null;
+        setDragging(true);
+        setPosition({ x: e.clientX, y: e.clientY });
+        if((colors[turn%2]==='white'&&whiteAi)||(colors[turn%2]==='black'&&blackAi)) return; // Prevent human from taking AI turn
+        // if(!originSquare) originSquare = e.target.id.split(',').map((str)=>parseInt(str));
+        if(!originSquareRef.current && e.target && e.target.childNodes && e.target.childNodes[0]) { 
+            const selectedPiece = e.target.childNodes[0];
+            setSelectedPiece(selectedPiece);
+            originalPosition = { x: selectedPiece.offsetLeft, y: selectedPiece.offsetTop };
+            originSquareRef.current = JSON.parse(e.target.childNodes[0].getAttribute("data-pos")); 
+        }
+        else  {
+            originSquareRef.current = JSON.parse(e.target.id);
+        }
+        setDragging(true);
+        if(!theBoard[originSquareRef.current[0]][originSquareRef.current[1]]) originSquareRef.current = null;
     }
 
     let destinationSquare = null;
-    function selectMove(e){
-        if(originSquare){
-            destinationSquare = e.target.id.split(',').map((str)=>parseInt(str));
-            if(JSON.stringify(originSquare) !== JSON.stringify(destinationSquare)) handlePieceMove(theBoard[originSquare[0]][originSquare[1]], destinationSquare)
+    function selectMove(e) {
+      setDragging(false);
+      
+      if (originSquareRef.current) {
+        try {
+          destinationSquare = JSON.parse(e.target.id);
+        } catch (error) {
+          resetPiecePosition();
+          originSquareRef.current = null;
+          return;
         }
-        originSquare = null;
+    
+        if (JSON.stringify(originSquareRef.current) !== JSON.stringify(destinationSquare)) {
+          const isMoveValid = handlePieceMove(theBoard[originSquareRef.current[0]][originSquareRef.current[1]], destinationSquare);
+          if ((originSquareRef.current === destinationSquare) || !isMoveValid) {
+            resetPiecePosition();
+          }
+        } else {
+          resetPiecePosition();
+        }           
+      }
+      originSquareRef.current = null;
     }
+    
+    function resetPiecePosition() {
+      setPosition({ x: 0, y: 0 });
+      setSelectedPiece(null);
+      selectedPiece.style.left = "0px";
+      selectedPiece.style.top = "0px";
+    }
+    
+    const handleMouseMove = (e) => {
+        if (dragging) {
+            document.body.style.cursor = 'grabbing';
+            const dx = e.clientX - position.x;
+            const dy = e.clientY - position.y;
+            setPosition({ x: e.clientX, y: e.clientY });
+          // update the position of the image
+          if(selectPiece){
+            selectedPiece.style.left = selectedPiece.offsetLeft + dx + "px";
+            selectedPiece.style.top = selectedPiece.offsetTop + dy + "px";
+          }
+        }
+    };
+
+    // let clickedSquare = useRef(null);
+    // function clickPiece(e) {
+    //     if(!clickedSquare.current && e.target && e.target.childNodes && e.target.childNodes[0]) { 
+    //         const [row,col] = JSON.parse(e.target.childNodes[0].getAttribute("data-pos"));
+    //         clickedSquare.current = [row,col];
+    //     } else{
+    //         const [row,col] = JSON.parse(e.target.id);
+    //         handlePieceMove(theBoard[clickedSquare.current[0]][clickedSquare[1]], [row,col]);
+    //     }
+    // }
 
     function formatMoves(moveLog){ 
         const rows = [];
@@ -267,7 +343,7 @@ function Board(props){
             tileRefs.current[movePositions[movePositions.length - deleteIdx][1][0]][movePositions[movePositions.length - deleteIdx][1][1]].style.backgroundColor = '';
         }
 
-        if(movePositions.length > 2){
+        if(movePositions.length > 1){
             tileRefs.current[oldRow][oldCol].style.backgroundColor = (oldRow + oldCol) % 2 === 0 ? light : dark;
             tileRefs.current[newRow][newCol].style.backgroundColor = (newRow + newCol) % 2 === 0 ? light : dark;
         }   
@@ -284,13 +360,13 @@ function Board(props){
                             {theRow.map( (theCol,colIdx)=>{
                                 return <div 
                                             className={` tile ${colors[(rowIdx+colIdx+1)%2]} ${theBoard[rowIdx][colIdx] ? "has-piece" : ""} ${isFlipped ? 'flip' : ''}`}
-                                            id={[rowIdx,colIdx]} key={colIdx}
+                                            id={`[${rowIdx},${colIdx}]`} key={colIdx}
                                             onMouseDown={selectPiece}
                                             onMouseUp={selectMove}
-                                            onClick={selectPiece}
+                                            // onClick={clickPiece}
                                             ref={(el) => (tileRefs.current[rowIdx][colIdx] = el)}
                                         >
-                                    {theBoard[rowIdx][colIdx] && <img src={theBoard[rowIdx][colIdx].image}/>}
+                                    {theBoard[rowIdx][colIdx] && <img src={theBoard[rowIdx][colIdx].image}  data-pos={`[${rowIdx},${colIdx}]`}/>}
                                     {colIdx ===  (isFlipped ? 0 : 9) ? <div className={`notation number ${(isFlipped ? (rowIdx % 2 === 1) : (rowIdx % 2 === 0)) ? 'light-sq-notation-color' : 'dark-sq-notation-color'}`}>{rows[rowIdx]}</div> : ''}
                                     {rowIdx ===  (isFlipped ? 0 : 7) ? <div className={`notation letter ${(isFlipped ? (colIdx % 2 === 1) : (colIdx % 2 === 0)) ? 'light-sq-notation-color' : 'dark-sq-notation-color'}`}>{cols[colIdx]}</div> : ''}
                                 </div>

@@ -30,6 +30,10 @@
 
 img{
     pointer-events: none;
+    height: 100px;
+    width: 100px;
+    z-index: 1;
+    position: absolute;
 }
 
 .has-piece{
