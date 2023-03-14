@@ -28,7 +28,7 @@
     background-color: var(--dark-color);
 }
 
-img{
+.tile img{
     pointer-events: none;
     height: 100px;
     width: 100px;
