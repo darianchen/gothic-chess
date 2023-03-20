@@ -54,10 +54,6 @@ function Board(props){
 
 
     useEffect(() => {
-        // if (isStalemate(theBoard, isKingInCheck(theBoard))){
-        //     window.alert('Stalemate');
-        //     stalemateAudio.play();
-        // };
         setTimeout(tryAiMove,1000);
     },[turn])
 
@@ -164,7 +160,8 @@ function Board(props){
                 if(typeof result === 'string'){
                     setGameOverModal(true);
                     setResult(result);
-                } else {    
+                } else {   
+                    isKingInCheck(theBoard,1); 
                     setTurn(turn + 1);
                 }
             }
@@ -229,11 +226,16 @@ function Board(props){
         return allMoves;
     }
 
-    function isKingInCheck(board) {
-        const king = board.flat().find((piece) => piece instanceof King && piece.inCheck(piece.position[0], piece.position[1]));
+    function isKingInCheck(board, checkOther = 0) {
+        const king = board.flat().find((piece) => piece instanceof King && piece.color !== colors[(turn+checkOther)%2]);
         if (king) {
-            tileRefs.current[king.position[0]][king.position[1]].classList.add('check');
-            return true;
+            if(king.inCheck(king.position[0],king.position[1])){
+                tileRefs.current[king.position[0]][king.position[1]].classList.add('check');
+                return true;
+            } else {
+                tileRefs.current[king.position[0]][king.position[1]].classList.remove('check');
+                return false;
+            }
         }
         return false;          
     }
@@ -340,8 +342,8 @@ function Board(props){
     function highlightMove(oldPositions,newPosition, undo = false){
         const [oldRow, oldCol] = oldPositions;
         const [newRow, newCol] = newPosition;
-        const light = '#ADD8E6';
-        const dark = '#99c2ff';
+        const dark = '#ADD8E6';
+        const light = '#99c2ff';
 
         if(turn > 1){ // removes the highlight from the previous move or current if undo
             const deleteIdx = undo === false ? 2 : 1;
