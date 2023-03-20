@@ -342,7 +342,7 @@ function Board(props){
     function highlightMove(oldPositions,newPosition, undo = false){
         const [oldRow, oldCol] = oldPositions;
         const [newRow, newCol] = newPosition;
-        const dark = '#ADD8E6';
+        const dark = '#49759B';
         const light = '#99c2ff';
 
         if(turn > 1){ // removes the highlight from the previous move or current if undo
