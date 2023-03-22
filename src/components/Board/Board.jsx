@@ -54,6 +54,7 @@ function Board(props){
 
 
     useEffect(() => {
+        setClickPosition(null);
         setTimeout(tryAiMove,1000);
     },[turn])
 
@@ -254,23 +255,34 @@ function Board(props){
     const originSquareRef = useRef(null);
     let originalPosition = null;
 
+    const [clickPosition, setClickPosition] = useState(null);
+
     function selectPiece(e){
         e.preventDefault();
-
         setDragging(true);
         setPosition({ x: e.clientX, y: e.clientY });
         if((colors[turn%2]==='white'&&whiteAi)||(colors[turn%2]==='black'&&blackAi)) return; // Prevent human from taking AI turn
         // if(!originSquare) originSquare = e.target.id.split(',').map((str)=>parseInt(str));
-        if(!originSquareRef.current && e.target && e.target.childNodes && e.target.childNodes[0]) { 
+        if(!originSquareRef.current && e.target.childNodes[0] && e.target.childNodes[0] instanceof HTMLImageElement) { 
             const selectedPiece = e.target.childNodes[0];
             setSelectedPiece(selectedPiece);
             originalPosition = { x: selectedPiece.offsetLeft, y: selectedPiece.offsetTop };
             originSquareRef.current = JSON.parse(e.target.childNodes[0].getAttribute("data-pos")); 
-        }
+            setClickPosition(originSquareRef.current);
+            if(clickPosition) {
+                handlePieceMove(theBoard[clickPosition[0]][clickPosition[1]], originSquareRef.current);
+                setDragging(false);
+                return;
+            }
+        } 
         else  {
             originSquareRef.current = JSON.parse(e.target.id);
+            if(clickPosition) {
+                handlePieceMove(theBoard[clickPosition[0]][clickPosition[1]], originSquareRef.current);
+                setDragging(false);
+                return;
+            }
         }
-        setDragging(true);
         if(!theBoard[originSquareRef.current[0]][originSquareRef.current[1]]) originSquareRef.current = null;
     }
 
@@ -300,10 +312,12 @@ function Board(props){
     }
     
     function resetPiecePosition() {
-      setPosition({ x: 0, y: 0 });
-      setSelectedPiece(null);
-      selectedPiece.style.left = "0px";
-      selectedPiece.style.top = "0px";
+        if(dragging){
+            setPosition({ x: 0, y: 0 });
+            setSelectedPiece(null);
+            selectedPiece.style.left = "0px";
+            selectedPiece.style.top = "0px";
+        }
     }
     
     const handleMouseMove = (e) => {
@@ -319,17 +333,6 @@ function Board(props){
           }
         }
     };
-
-    // let clickedSquare = useRef(null);
-    // function clickPiece(e) {
-    //     if(!clickedSquare.current && e.target && e.target.childNodes && e.target.childNodes[0]) { 
-    //         const [row,col] = JSON.parse(e.target.childNodes[0].getAttribute("data-pos"));
-    //         clickedSquare.current = [row,col];
-    //     } else{
-    //         const [row,col] = JSON.parse(e.target.id);
-    //         handlePieceMove(theBoard[clickedSquare.current[0]][clickedSquare[1]], [row,col]);
-    //     }
-    // }
 
     function formatMoves(moveLog){ 
         const rows = [];
