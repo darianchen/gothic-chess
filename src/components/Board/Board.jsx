@@ -271,7 +271,6 @@ function Board(props){
             setClickPosition(originSquareRef.current);
             if(clickPosition) {
                 handlePieceMove(theBoard[clickPosition[0]][clickPosition[1]], originSquareRef.current);
-                setDragging(false);
                 return;
             }
         } 
